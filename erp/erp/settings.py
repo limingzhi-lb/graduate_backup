@@ -75,17 +75,22 @@ WSGI_APPLICATION = 'erp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'erp',
+#         'USER': 'root',
+#         'PASSWORD': 'lmz1995',
+#         'HOST': 'localhost',
+#         'POST':'3306',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'erp',
-        'USER': 'root',
-        'PASSWORD': 'lmz1995',
-        'HOST': 'localhost',
-        'POST':'3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

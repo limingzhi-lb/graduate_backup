@@ -21,9 +21,10 @@ class JSONField(models.TextField):
 
 class User(AbstractUser):
     __name__ = 'User'
-    staff_id = models.IntegerField(primary_key=True,db_index=True)
+    staff_id = models.IntegerField(primary_key=True, db_index=True)
     is_leader = models.BooleanField(default=False)
-    dep_id = models.IntegerField(null=False,db_index=True)
+    dep_id = models.IntegerField(null=False, db_index=True)
+    status = models.BooleanField(default=True)
 
     class Meta(AbstractUser.Meta):
         pass
@@ -40,5 +41,35 @@ class OrgRole(models.Model):
     __name__ = 'OrgRole'
     role_id = models.IntegerField(primary_key=True, db_index=True)
     dep_category = models.IntegerField(db_index=True, null=False)
+
     class Meta:
         unique_together = ('role_id', 'dep_category')
+
+
+class UserPermission(models.Model):
+    __name__ = 'UserPermission'
+    staff_id = models.IntegerField(db_index=True)
+    action = models.CharField(max_length=24)
+    resource = models.CharField(max_length=24)
+
+    class Meta:
+        unique_together = ('staff_id', 'action', 'resource')
+
+
+class RolePermission(models.Model):
+    __name__ = 'RolePermission'
+    role_id = models.IntegerField(primary_key=True,db_index=True)
+    permission = JSONField()
+
+
+class UserRole(models.Model):
+    __name__ = 'UserRole'
+    staff_id = models.IntegerField(db_index=True)
+    org_id = models.IntegerField(db_index=True)
+    role_id = models.IntegerField(db_index=True)
+
+
+class Department(models.Model):
+    __name__ = 'Department'
+    name = models.CharField(max_length=12, primary_key=True)
+    category = models.IntegerField()
