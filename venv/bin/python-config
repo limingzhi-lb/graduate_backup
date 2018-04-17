@@ -1,4 +1,4 @@
-#!/Users/mingzhi.li/Desktop/graduate/venv/bin/python
+#!/home/lmz/Code/my_graduate/graduate/venv/bin/python
 
 import sys
 import getopt
