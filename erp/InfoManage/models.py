@@ -1,21 +1,22 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 import json
 
 
-class JSONField(models.TextField):
-    __metaclass__ = models.SubfieldBase
-    description = "Json"
-
-    def to_python(self, value):
-        v = models.TextField.to_python(self, value)
-        try:
-            return json.loads(v)['v']
-        except:
-            pass
-        return v
-
-    def get_prep_value(self, value):
-        return json.dumps({'v': value})
+# class JSONField(models.TextField):
+#     __metaclass__ = models.SubfieldBase
+#     description = "Json"
+#
+#     def to_python(self, value):
+#         v = models.TextField.to_python(self, value)
+#         try:
+#             return json.loads(v)['v']
+#         except:
+#             pass
+#         return v
+#
+#     def get_prep_value(self, value):
+#         return json.dumps({'v': value})
 
 
 class Vender(models.Model):
@@ -37,7 +38,6 @@ class RawMaterial(models.Model):
     batch_number = models.CharField(max_length=8)
     created = models.DateTimeField()
     updated = models.DateTimeField()
-
 
 
 class OrderForm(models.Model):
@@ -62,14 +62,14 @@ class OrderFormGoods(models.Model):
     of_id = models.IntegerField(primary_key=True)
     num = models.IntegerField()
 
-    def Meta:
+    class Meta:
         unique_together = ('rm_name', 'of_id')
 
 
 class Stor(models.Model):
     __name__ = 'Stor'
     s_id = models.IntegerField(primary_key=True)
-    name = models.CharField(primary_key=True)
+    name = models.CharField(max_length=12)
     valid = models.BooleanField(default=1)
 
 
@@ -151,15 +151,15 @@ class WasteForm(models.Model):
     num = models.IntegerField()
     pf_id = models.IntegerField()
 
-    def Meta:
+    class Meta:
         unique_together = ('name', 'pf_id')
 
 
 class Customer(models.Model):
     __name__ = 'Customer'
-    c_name = models.CharField(max_length=24,primary_key=True)
+    c_name = models.CharField(max_length=24, primary_key=True)
     tel = models.CharField(max_length=12)
-    addr = models.CharField(32)
+    addr = models.CharField(max_length=32)
 
 
 class SaleForm(models.Model):
@@ -183,14 +183,16 @@ class SaleFormProduct(models.Model):
     pro_name = models.CharField(max_length=8)
     num = models.IntegerField()
     price = models.IntegerField()
-    def Meta:
+    class Meta:
         unique_together = ('sf_id', 'pro_name')
+
 
 class StorDetail(models.Model):
     __name__ = 'StorDetail'
     name = models.CharField(max_length=12, primary_key=True)
     num = models.IntegerField()
     s_id = models.IntegerField()
-    def Meta:
+
+    class Meta:
         unique_together = ('name', 's_id')
 

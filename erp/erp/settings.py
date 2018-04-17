@@ -86,9 +86,10 @@ WSGI_APPLICATION = 'erp.wsgi.application'
 #     }
 # }
 DATABASES = {
+
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'erp',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
