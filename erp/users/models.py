@@ -14,7 +14,6 @@ class User(AbstractUser):
         pass
 
 
-
 class Role(models.Model):
     __name__ = 'Role'
     role_id = models.IntegerField(primary_key=True)

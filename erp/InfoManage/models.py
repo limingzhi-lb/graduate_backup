@@ -1,4 +1,4 @@
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 import json
 
@@ -26,7 +26,7 @@ class Vender(models.Model):
     tel = models.CharField(max_length=12)
     created = models.DateTimeField()
     updated = models.DateTimeField()
-    rm_name = JSONField()
+    rm_name = ArrayField(models.IntegerField(), default=1)
 
 
 class RawMaterial(models.Model):
@@ -43,6 +43,7 @@ class RawMaterial(models.Model):
 class OrderForm(models.Model):
     __name__ = 'OrderForm'
     of_id = models.IntegerField(primary_key=True)
+    # ven_name = models.CharField()
     ven_id = models.IntegerField()
     created = models.DateTimeField()
     s_id = models.IntegerField(default=0)
@@ -103,7 +104,7 @@ class OutStorForm(models.Model):
     check = models.BooleanField(default=0)
     note = models.CharField(max_length=64)
     finished = models.DateTimeField()
-    osd_id = JSONField()
+    osd_id = ArrayField(models.IntegerField())
 
 
 class OutStorDetail(models.Model):
@@ -118,16 +119,16 @@ class OutStorDetail(models.Model):
 class Product(models.Model):
     __name__ = 'Product'
     pro_name = models.CharField(max_length=8,primary_key=True)
-    rm = JSONField()
-    hp = JSONField()
+    rm = ArrayField(models.IntegerField())
+    hp = ArrayField(models.IntegerField())
     price = models.FloatField()
 
 
 class HalfProduct(models.Model):
     __name__ = 'HalfProduct'
     hp_name = models.CharField(max_length=8,primary_key=True)
-    rm = JSONField()
-    hp = JSONField()
+    rm = ArrayField(models.IntegerField())
+    hp = ArrayField(models.IntegerField())
 
 
 class ProduceForm(models.Model):
@@ -172,7 +173,7 @@ class SaleForm(models.Model):
     deliver_date = models.DateTimeField()
     s_id = models.IntegerField()
     state = models.BooleanField(default=0)
-    pro_name = JSONField()
+    pro_name = ArrayField(models.IntegerField())
     check = models.BooleanField(default=0)
     out_stor_date = models.DateTimeField()
 
