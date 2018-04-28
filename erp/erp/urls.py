@@ -18,8 +18,8 @@ from django.conf.urls import url, include
 
 
 urlpatterns = [
-    url(r'admin/', xadmin.site.urls),
-    url(r'', include('InfoManage.urls')),
+    url(r'', xadmin.site.urls),
+    # url(r'', include('InfoManage.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
 
 ]

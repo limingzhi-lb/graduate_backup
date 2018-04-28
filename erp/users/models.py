@@ -5,14 +5,21 @@ from django.db import models
 
 class User(AbstractUser):
     __name__ = 'User'
-    staff_id = models.IntegerField(blank=True, null=True)
-    is_leader = models.NullBooleanField(blank=True, null=True)
-    dep_id = models.IntegerField(blank=True, null=True)
-    status = models.NullBooleanField(blank=True, null=True)
+    staff_id = models.IntegerField('微信', blank=True, null=True)
+    is_leader = models.NullBooleanField('是否是领导', blank=True, null=True)
+    # dep_id = models.CharField(Department.name, blank=True)
+    status = models.NullBooleanField('是否可用', blank=True, null=True)
 
     class Meta(AbstractUser.Meta):
-        pass
+        db_table = 'User'
 
+
+'''
+class Department(models.Model):
+    __name__ = 'Department'
+    name = models.CharField(max_length=12, primary_key=True)
+    category = models.IntegerField()
+    
 
 class Role(models.Model):
     __name__ = 'Role'
@@ -52,8 +59,5 @@ class UserRole(models.Model):
     org_id = models.IntegerField(db_index=True)
     role_id = models.IntegerField(db_index=True)
 
+'''
 
-class Department(models.Model):
-    __name__ = 'Department'
-    name = models.CharField(max_length=12, primary_key=True)
-    category = models.IntegerField()

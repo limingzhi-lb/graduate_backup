@@ -52,6 +52,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.middleware.GetUserModel',
+    # 'middleware.middleware.Row2',
+    # 'middleware.middleware.Row3',
 ]
 
 ROOT_URLCONF = 'erp.urls'
@@ -78,23 +81,23 @@ WSGI_APPLICATION = 'erp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'erp',
-#         'USER': 'root',
-#         'PASSWORD': 'lmz1995',
-#         'HOST': 'localhost',
-#         'POST':'3306',
-#     }
-# }
 DATABASES = {
-
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'erp',
+        'USER': 'root',
+        'PASSWORD': 'lmz1995',
+        'HOST': 'localhost',
+        'POST': '3306',
     }
 }
+# DATABASES = {
+#
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -143,3 +146,6 @@ STATICFILES_DIRS = (
 AUTH_USER_MODEL = 'users.User'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
+
+# AUTH_USER_MODEL = ''
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

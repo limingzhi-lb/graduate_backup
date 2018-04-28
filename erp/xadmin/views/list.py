@@ -71,7 +71,11 @@ class ResultItem(object):
         if force_text(text) == '':
             text = mark_safe('&nbsp;')
         for wrap in self.wraps:
-            text = mark_safe(wrap % text)
+            try:
+                text = mark_safe(wrap % text)
+                # text = wrap % text
+            except:
+                text = 0
         return text
 
     @property
