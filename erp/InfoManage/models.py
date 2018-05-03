@@ -120,7 +120,7 @@ class OrderFormGoods(models.Model):
 
 class SwapForm(models.Model):
     __name__ = 'SwapForm'
-    sf_name = models.CharField('表名', max_length=48)
+    sf_name = models.CharField('表名', max_length=48, unique=True)
     # staff_name = models.ForeignKey('执行人', User, related_name='username')
     staff_name = models.ForeignKey(User, related_name='swap_form_username', verbose_name='执行人')
     # before_s_id = models.ForeignKey('原仓库', Stor, related_name='s_name')
@@ -128,8 +128,8 @@ class SwapForm(models.Model):
     # after_s_id = models.ForeignKey('目标仓库', Stor, related_name='s_name')
     after_s_id = models.ForeignKey(Stor, related_name='swap_form_s_name', verbose_name='目标仓库')
     created = models.DateTimeField('创建时间')
-    finished = models.DateTimeField('完成时间')
-    check = models.BooleanField('是否确认', default=0)
+    finished = models.DateTimeField('完成时间', blank=True, null=True)
+    check = models.BooleanField('是否确认', default=False)
 
     class Meta:
         db_table = 'SwapForm'

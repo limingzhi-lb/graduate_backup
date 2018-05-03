@@ -1,2 +1,0 @@
-重写Create get_response方法来发送微信，同时判断用户身份
-

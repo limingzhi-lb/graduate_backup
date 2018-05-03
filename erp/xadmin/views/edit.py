@@ -162,7 +162,7 @@ class ModelFormAdminView(ModelAdminView):
             exclude = []
         else:
             exclude = list(self.exclude)
-        exclude.extend(self.get_readonly_fields())
+        exclude.extend(self.get_read_only_fields())
         if self.exclude is None and hasattr(self.form, '_meta') and self.form._meta.exclude:
             # Take the custom ModelForm's Meta.exclude into account only if the
             # ModelAdmin doesn't define its own.
@@ -195,7 +195,7 @@ class ModelFormAdminView(ModelAdminView):
         arr = self.form_obj.fields.keys()
         if six.PY3:
             arr = [k for k in arr]
-        fields = arr + list(self.get_readonly_fields())
+        fields = arr + list(self.get_read_only_fields())
 
         if layout is None:
             layout = Layout(Container(Col('full',
@@ -231,7 +231,7 @@ class ModelFormAdminView(ModelAdminView):
         helper.add_layout(self.get_form_layout())
 
         # deal with readonly fields
-        readonly_fields = self.get_readonly_fields()
+        readonly_fields = self.get_read_only_fields()
         if readonly_fields:
             detail = self.get_model_view(
                 DetailAdminUtil, self.model, self.form_obj.instance)
@@ -239,6 +239,13 @@ class ModelFormAdminView(ModelAdminView):
                 helper[field].wrap(ReadOnlyField, detail=detail)
 
         return helper
+
+    @filter_hook
+    def get_read_only_fields(self, **kwargs):
+        """
+        Hook for specifying custom readonly fields.
+        """
+        return self.readonly_fields
 
     @filter_hook
     def get_readonly_fields(self):
@@ -491,6 +498,13 @@ class UpdateAdminView(ModelFormAdminView):
         bcs.append(item)
 
         return bcs
+
+    @filter_hook
+    def get_read_only_fields(self, **kwargs):
+        """
+        Hook for specifying custom readonly fields.
+        """
+        return self.readonly_fields
 
     @filter_hook
     def get_response(self, *args, **kwargs):

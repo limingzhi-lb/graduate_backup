@@ -28,8 +28,9 @@ PLUGINS = (
     'language', 
     'quickfilter',
     'sortablelist',
-	'importexport',
-    'myplugin',
+    'importexport',
+    'myplugin.order_plugin',
+    'myplugin.stor_plugin',
 )
 
 
