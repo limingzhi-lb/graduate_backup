@@ -10,6 +10,7 @@ from django.contrib.auth import get_permission_codename
 from django.utils import six
 from django.utils.encoding import smart_text
 from crispy_forms.utils import TEMPLATE_PACK
+from bs4 import BeautifulSoup
 
 from xadmin.layout import FormHelper, Layout, flatatt, Container, Column, Field, Fieldset
 from xadmin.plugins.utils import get_context_dict
@@ -220,8 +221,7 @@ class InlineModelAdmin(ModelFormAdminView):
 
         instance.helper = helper
         instance.style = style
-
-        readonly_fields = self.get_readonly_fields()
+        readonly_fields = self.get_read_only_fields()
         if readonly_fields:
             for form in instance:
                 form.readonly_fields = []
@@ -230,7 +230,7 @@ class InlineModelAdmin(ModelFormAdminView):
                     for readonly_field in readonly_fields:
                         value = None
                         label = None
-                        if readonly_field in inst._meta.get_all_field_names():
+                        if readonly_field in inst._meta._get_fields():
                             label = inst._meta.get_field(readonly_field).verbose_name
                             value = smart_text(getattr(inst, readonly_field))
                         elif inspect.ismethod(getattr(inst, readonly_field, None)):

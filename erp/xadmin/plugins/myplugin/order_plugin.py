@@ -1,11 +1,14 @@
 from xadmin.views import BaseAdminPlugin, ListAdminView, ModelFormAdminView, CreateAdminView, UpdateAdminView, DetailAdminView
+from xadmin.plugins.inline import InlineModelAdmin
 import xadmin
 from copy import deepcopy
 from InfoManage.models import *
+from users.models import User
 from InfoManage.config import Config
 import datetime
 from script.SendMsg import SendMsg
-
+from django.forms.models import ModelChoiceField
+from django.contrib.auth.models import Group
 config = Config()
 
 
@@ -30,20 +33,6 @@ class CreateOrderFormPlugin(BaseAdminPlugin):
         return readonly_fields
 
 
-class CreateOrderFormGoodsPlugin(BaseAdminPlugin):
-    order_form_goods = False
-    of = OrderForm()
-
-    def init_request(self, *args, **kwargs):
-        return bool(self.order_form_goods)
-
-    def get_form_datas(self, data):
-        if 'data' in data.keys():
-            # of_goods = Or
-            pass
-        return data
-
-
 class UpdateOrderFormGoodsPlugin(BaseAdminPlugin):
     order_form_goods = False
     of_good_id = None
@@ -55,7 +44,7 @@ class UpdateOrderFormGoodsPlugin(BaseAdminPlugin):
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
         of_good = OrderFormGoods.objects.get(id=self.of_good_id)
         if of_good.of_name.is_finish:
-            readonly_fields = ('rm_name', 'num', 'of_name', 'batch_number')
+            readonly_fields = ('rm_name', 'num', 'of_name')
         return readonly_fields
 
 
@@ -66,49 +55,64 @@ class OrderFormGoodsPlugin(BaseAdminPlugin):
     def init_request(self, *args, **kwargs):
         return bool(self.order_form_goods)
 
-    def prepare_form(self, form):
-        # print(form)
-        return form
+    def formfield_for_dbfield(self, data, *args, **kwargs):
+        if isinstance(data, ModelChoiceField):
+            queryset = data._get_queryset()
+            if isinstance(queryset[0], OrderForm):
+                queryset = OrderForm.objects.filter(is_finish=False)
+                data._set_queryset(queryset)
+        return data
 
-    def instance_forms(self, form):
-        # print(form)
-        return form
+    def get_form_datas(self, data):
+        new_data = deepcopy(data)
+        print(new_data)
+        if 'data' in new_data.keys():
+            of_id = new_data['data']['of_name']
+            rm_id = new_data['data']['rm_name']
+            vender = OrderForm.objects.get(id=of_id).ven_name
+            rm = RawMaterial.objects.get(id=rm_id)
+            if rm not in vender.rm_name.all():
+                new_data['data']['num'] = 0
+            if not vender.rm_name:
+                new_data['data']['num'] = 0
+        return new_data
 
-    def get_model_form(self, form):
-        # print(form.Meta.form)
-        # print(form.Meta['fields'])
-        # print(form.Meta.exclude)
-        # print(form.Meta.eformfield_callback)
 
-        return form
+class OrderFormPlugin(BaseAdminPlugin):
+    order_form = False
+    of_good_id = None
+
+    def init_request(self, *args, **kwargs):
+        return bool(self.order_form)
+
+    def formfield_for_dbfield(self, data, *args, **kwargs):
+        if isinstance(data, ModelChoiceField):
+            queryset = data._get_queryset()
+            if isinstance(queryset[0], User):
+                group = Group.objects.get(name=config['purchase'])
+                queryset = group.user_set.all()
+                data._set_queryset(queryset)
+            # elif isinstance(queryset[0], Stor):
+            #     queryset = Stor.objects.filter(valid=True)
+            #     data._set_queryset(queryset)
+        return data
 
 
-    def get_form_layout(self, form):
-        # print(type(form))
-        # print(dir(form))
-        # print(form.get_layout_objects)
-        # print(dir(form.fields[0]))
-        # print(dir(form.fields[0].fields[0]))
-        # print(form.fields[0].fields[0].fields)
-        return form
-    # def get(self, data):
-    #     print(data)
-    #     return data
 
 class UpdateOrderFormByPurchase(BaseAdminPlugin):
     update_order_form = False
     of_id = None
 
     def init_request(self, *args, **kwargs):
-        is_purchase = self.user.groups.all()[0].name == config['purchase']
+        is_purchase = ''
+        if self.user.groups.all():
+            is_purchase = self.user.groups.all()[0].name == config['purchase']
         self.of_id = args[0]
         return bool(self.update_order_form and is_purchase)
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
-        # print(OrderForm.objects.get(id=self.of_id).is_finish)
-        # print('*******')
         if OrderForm.objects.get(id=self.of_id).is_finish:
-            readonly_fields = ['of_name', 'ven_name', 'created', 's_name', 'delivery', 'typ', 'receipt_status',
+            readonly_fields = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status',
                                'payment_status', 'total_price', 'executor', 'storage_time', 'is_finish']
         elif self.user.is_leader:
             readonly_fields = ('delivery', 'receipt_status', 'storage_time', 'total_price')
@@ -117,11 +121,12 @@ class UpdateOrderFormByPurchase(BaseAdminPlugin):
         else:
             readonly_fields = ('delivery', 'receipt_status', 'storage_time', 'created', 'payment_status',
                                'total_price', 'executor', 'is_finish')
+        print(readonly_fields)
         return readonly_fields
 
     def get_form_datas(self, data):
         new_data = deepcopy(data)
-        # print(new_data)
+
         if 'data' in new_data.keys() and 'is_finish' in new_data['data'].keys():
             if self.user.is_leader:
                 if new_data['data']['is_finish'] == 'on':
@@ -129,13 +134,21 @@ class UpdateOrderFormByPurchase(BaseAdminPlugin):
                     of_goods = OrderFormGoods.objects.filter(of_name=new_data['instance'].id)
                     for of_good in of_goods:
                         stor_detail = ''
-                        try:
-                            stor_detail = StorDetail.objects.filter(good_name=of_good.rm_name, s_name=new_data['instance'].s_name)
-                        except:
-                            pass
-                        if stor_detail:
-                            stor_detail[0].num += of_good.num
-                            stor_detail[0].save()
+                        if of_good.num == 0:
+                            of_good.delete()
+                        else:
+                            try:
+                                stor_detail = StorDetail.objects.filter(good_name=of_good.rm_name)
+                            except:
+                                pass
+                            if stor_detail:
+                                stor_detail[0].num += of_good.num
+                                stor_detail[0].save()
+                            else:
+                                stor_detail = StorDetail()
+                                stor_detail.good_name = of_good.rm_name
+                                stor_detail.num = of_good.num
+                                stor_detail.save()
         return new_data
 
 
@@ -144,7 +157,9 @@ class UpdateOrderFormByStor(BaseAdminPlugin):
     of_id = None
 
     def init_request(self, *args, **kwargs):
-        is_stor = self.user.groups.all()[0].name == config['stor']
+        is_stor = ''
+        if self.user.groups.all():
+            is_stor = self.user.groups.all()[0].name == config['stor']
         self.of_id = args[0]
         return bool(self.update_order_form and is_stor)
 
@@ -152,7 +167,6 @@ class UpdateOrderFormByStor(BaseAdminPlugin):
         new_data = deepcopy(data)
         if 'data' in new_data.keys():
             today = datetime.datetime.now().strftime('%Y/%m/%d')
-            # datetime.datetime.strptime(new_data['data']['delivery_0'], '%Y/%m/%d')
             now = datetime.datetime.now().strftime("%H:%M:%S")
             if 'receipt_status' in new_data['data'].keys():
                 if not new_data['data']['delivery_0'] and not new_data['data']['storage_time_0']:
@@ -193,10 +207,10 @@ class UpdateOrderFormByStor(BaseAdminPlugin):
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
         if OrderForm.objects.get(id=self.of_id).is_finish:
-            readonly_fields = ['of_name', 'ven_name', 'created', 's_name', 'delivery', 'typ', 'receipt_status',
+            readonly_fields = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status',
                                'payment_status', 'total_price', 'executor', 'storage_time', 'is_finish']
         else:
-            readonly_fields = ('of_name', 'ven_name', 'created', 's_name', 'typ', 'payment_status',
+            readonly_fields = ('of_name', 'ven_name', 'created', 'typ', 'payment_status',
                                'total_price', 'executor', 'is_finish')
         return readonly_fields
 
@@ -215,26 +229,19 @@ class test(BaseAdminPlugin):
         return bool(self.view_order_form_detail)
 
     def get_readonly_fields(self, readonly_fields):
-        # print(self.re)
-        # print(OrderForm.objects.get(id=self.of_id).is_finish)
-        # readonly_fields = []
         if OrderForm.objects.get(id=self.of_id).is_finish:
-            # print(type(data.Meta.exclude))
-            # print(readonly_fields)
-            # print('**&&&&&')
             readonly_fields = ['of_name', 'ven_name', 'created', 's_name', 'delivery', 'typ', 'receipt_status',
                                'payment_status', 'total_price', 'executor', 'storage_time', 'is_finish']
         return readonly_fields
 
-# class
-
 
 xadmin.site.register_plugin(CreateOrderFormPlugin, CreateAdminView)
-xadmin.site.register_plugin(CreateOrderFormGoodsPlugin, CreateAdminView)
+# xadmin.site.register_plugin(CreateOrderFormGoodsPlugin, CreateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormByStor, UpdateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormByPurchase, UpdateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormGoodsPlugin, UpdateAdminView)
 xadmin.site.register_plugin(OrderFormGoodsPlugin, ModelFormAdminView)
-# xadmin.site.register_plugin(ViewOrderFormDetail, DetailAdminView)
-# xadmin.site.register_plugin(test, ModelFormAdminView)
+xadmin.site.register_plugin(OrderFormPlugin, ModelFormAdminView)
+# xadmin.site.register_plugin(OrderFormGoodsInline, InlineModelAdmin)
+
 

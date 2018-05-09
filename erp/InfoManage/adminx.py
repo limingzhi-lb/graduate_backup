@@ -1,10 +1,12 @@
 import xadmin
 from xadmin import views
 from .models import *
+from django.contrib import admin
 from .config import Config
 '''
     添加配置文件，自己定义读取user_group的脚本，获取信息
 '''
+
 
 class BaseSetting(object):
 
@@ -19,6 +21,7 @@ class VenderAdmin(object):
     list_filter = ['ven_name', 'addr', 'tel', 'created', 'updated', 'rm_name']
     read_only_fields = ('ven_name', 'addr')
     list_per_page = 5
+    filter_horizontal = ('rm_name',)
 
 
 class RawMaterialAdmin(object):
@@ -32,17 +35,23 @@ class RawMaterialAdmin(object):
     list_per_page = 5
 
 
+class StorDetailInline(object):
+    model = StorDetail
+    extra = 0
+
+
 class StorAdmin(object):
     list_display = ['s_name', 'valid']
     search_fields = ['s_name', 'valid']
     list_filter = ['s_name', 'valid']
     list_per_page = 5
+    # inlines = [StorDetailInline, ]
 
 
 class StorDetailAdmin(object):
-    list_display = ['good_name', 'num', 's_name']
-    search_fields = ['good_name', 'num', 's_name']
-    list_filter = ['good_name', 'num', 's_name']
+    list_display = ['good_name', 'num']
+    search_fields = ['good_name', 'num']
+    list_filter = ['good_name', 'num']
     list_per_page = 5
 
 
@@ -50,14 +59,15 @@ class OrderFormAdmin(object):
     create_order_form = True
     update_order_form = True
     view_order_form_detail = True
-    list_display = ['of_name', 'ven_name', 'created', 's_name', 'delivery', 'typ', 'receipt_status', 'payment_status',
+    order_form = True
+    list_display = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status', 'payment_status',
                     'total_price', 'executor', 'storage_time', 'is_finish']
-    search_fields = ['of_name', 'ven_name', 'created', 's_name', 'delivery', 'typ', 'receipt_status', 'payment_status',
+    search_fields = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status', 'payment_status',
                      'total_price', 'executor', 'storage_time', 'is_finish']
-    list_filter = ['of_name', 'ven_name', 'created', 's_name', 'delivery', 'typ', 'receipt_status', 'payment_status',
+    list_filter = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status', 'payment_status',
                    'total_price', 'executor', 'storage_time', 'is_finish']
-    readonly_fields = ()
     list_per_page = 5
+    # inlines = [OrderFormGoodsInline, ]
 
     # def rm_name(self, obj):
     #     return
@@ -98,6 +108,10 @@ class OrderFormGoodsAdmin(object):
     #     return [(None, {'fields': self.get_fields(request, obj)})]
 
 
+# class SwapFormDetailInline(object):
+#     model = SwapFormDetail
+#     extra = 0
+
 class SwapFormAdmin(object):
     swap_form = True
     list_display = ['sf_name', 'staff_name', 'before_s_id', 'after_s_id', 'created', 'finished', 'check']
@@ -108,24 +122,35 @@ class SwapFormAdmin(object):
 
 class SwapFormDetailAdmin(object):
     swap_form_detail = True
+    swap_form = True
     list_display = ['good_name', 'num', 'sf_name']
     search_fields = ['good_name', 'num', 'sf_name']
     list_filter = ['good_name', 'num', 'sf_name']
     list_per_page = 5
 
 
-class OutStoreFormAdmin(object):
-    list_display = ['osf_name', 'created', 'after_s_name', 'staff_id', 'check', 'note', 'finished']
-    search_fields = ['osf_name', 'created', 'after_s_name', 'staff_id', 'check', 'note', 'finished']
-    list_filter = ['osf_name', 'created', 'after_s_name', 'staff_id', 'check', 'note', 'finished']
-    list_per_page = 5
-
-
 class OutStorDetailAdmin(object):
+    out_stor_detail = True
     list_display = ['good_name', 'num', 'osf_name']
     search_fields = ['good_name', 'num', 'osf_name']
     list_filter = ['good_name', 'num', 'osf_name']
     list_per_page = 5
+
+
+
+# class OutStorDetailInline(object):
+#     model = OutStorDetail
+#     extra = 1
+
+
+class OutStoreFormAdmin(object):
+    create_out_stor = True
+    update_out_stor = True
+    list_display = ['osf_name', 'created', 'staff_id', 'check', 'note', 'finished']
+    search_fields = ['osf_name', 'created', 'staff_id', 'check', 'note', 'finished']
+    list_filter = ['osf_name', 'created', 'staff_id', 'check', 'note', 'finished']
+    list_per_page = 5
+    # inlines = [OutStorDetailInline, ]
 
 
 class ProductAdmin(object):
@@ -180,6 +205,11 @@ class CustomerAdmin(object):
     list_per_page = 5
 
 
+class SaleFormProductInline(object):
+    model = SaleFormProduct
+    extra = 0
+
+
 class SaleFormAdmin(object):
     list_display = ['sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
                     's_name', 'state', 'check', 'out_stor_date']
@@ -188,6 +218,7 @@ class SaleFormAdmin(object):
     list_filter = ['sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
                    's_name', 'state', 'check', 'out_stor_date']
     list_per_page = 5
+    # inlines = [SaleFormProductInline, ]
 
 
 class SaleFormProductAdmin(object):
@@ -212,9 +243,9 @@ xadmin.site.register(Vender, VenderAdmin)
 xadmin.site.register(RawMaterial, RawMaterialAdmin)
 xadmin.site.register(OrderForm, OrderFormAdmin)
 xadmin.site.register(OrderFormGoods, OrderFormGoodsAdmin)
-xadmin.site.register(Stor, StorAdmin)
-xadmin.site.register(SwapForm, SwapFormAdmin)
-xadmin.site.register(SwapFormDetail, SwapFormDetailAdmin)
+# xadmin.site.register(Stor, StorAdmin)
+# xadmin.site.register(SwapForm, SwapFormAdmin)
+# xadmin.site.register(SwapFormDetail, SwapFormDetailAdmin)
 xadmin.site.register(OutStorForm, OutStoreFormAdmin)
 xadmin.site.register(OutStorDetail, OutStorDetailAdmin)
 xadmin.site.register(Product, ProductAdmin)

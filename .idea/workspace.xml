@@ -3,17 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="217236f9-807d-47e5-b5e0-e2ec634c1acc" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/doc/note.yaml.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/note.md" beforeDir="false" afterPath="$PROJECT_DIR$/doc/note.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/doc/虚拟服务器部署代码.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/erp/InfoManage/adminx.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/InfoManage/adminx.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/InfoManage/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/InfoManage/migrations/0002_auto_20180428_1513.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/InfoManage/migrations/0003_auto_20180502_2323.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/erp/InfoManage/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/InfoManage/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/erp/db_script/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/script/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/erp/erp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/erp/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/erp/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/erp/xadmin/plugins/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/xadmin/plugins/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/erp/xadmin/plugins/myplugin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/users/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/users/migrations/0002_auto_20180423_1725.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/xadmin/plugins/inline.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/xadmin/plugins/inline.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/stor_plugin.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/stor_plugin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/erp/xadmin/views/edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/erp/xadmin/views/edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/contrib/auth/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/contrib/auth/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/pip-selfcheck.json" beforeDir="false" afterPath="$PROJECT_DIR$/venv/pip-selfcheck.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,14 +26,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.65702814">
+    <splitter split-orientation="horizontal" split-proportion="0.641918">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="order_plugin.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="order_plugin.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2805">
-                  <caret line="193" column="67" selection-start-line="193" selection-start-column="29" selection-end-line="193" selection-end-column="67" />
+                <state relative-caret-position="1125">
+                  <caret line="171" column="73" selection-start-line="171" selection-start-column="73" selection-end-line="171" selection-end-column="73" />
                   <folding>
                     <element signature="e#0#126#0" expanded="true" />
                   </folding>
@@ -38,11 +41,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="stor_plugin.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="stor_plugin.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin/stor_plugin.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="275">
-                  <caret line="30" column="62" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+                <state relative-caret-position="133">
+                  <caret line="77" column="37" lean-forward="true" selection-start-line="77" selection-start-column="37" selection-end-line="77" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#126#0" expanded="true" />
                   </folding>
@@ -50,67 +53,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="form.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/erp/xadmin/views/form.py">
+          <file leaf-file-name="fields.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/forms/fields.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state>
-                  <folding>
-                    <element signature="e#0#38#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="detail.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/erp/xadmin/views/detail.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2205">
-                  <caret line="168" selection-start-line="168" selection-end-line="168" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/erp/xadmin/views/base.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="6825">
-                  <caret line="487" selection-start-line="487" selection-end-line="487" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="edit.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/edit.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2550">
-                  <caret line="189" column="30" selection-start-line="189" selection-start-column="30" selection-end-line="189" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="layout.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/crispy_forms/layout.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1980">
-                  <caret line="141" selection-start-line="141" selection-end-line="141" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/forms/models.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="7860">
-                  <caret line="542" column="39" selection-start-line="542" selection-start-column="39" selection-end-line="542" selection-end-column="39" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="edit.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/erp/xadmin/views/edit.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="7245">
-                  <caret line="505" column="11" selection-start-line="505" selection-start-column="11" selection-end-line="505" selection-end-column="11" />
+                <state relative-caret-position="11355">
+                  <caret line="788" column="21" selection-start-line="788" selection-start-column="21" selection-end-line="788" selection-end-column="21" />
                 </state>
               </provider>
             </entry>
@@ -122,8 +69,8 @@
           <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/erp/InfoManage/models.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="15">
-                  <caret line="57" column="21" lean-forward="true" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="21" />
+                <state relative-caret-position="326">
+                  <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
                   <folding>
                     <element signature="e#0#53#0" expanded="true" />
                   </folding>
@@ -134,20 +81,11 @@
           <file leaf-file-name="adminx.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/erp/InfoManage/adminx.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1590">
-                  <caret line="109" column="27" selection-start-line="109" selection-start-column="27" selection-end-line="109" selection-end-column="27" />
+                <state relative-caret-position="2145">
+                  <caret line="147" column="26" selection-start-line="147" selection-start-column="26" selection-end-line="147" selection-end-column="26" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="options.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/contrib/admin/options.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="19755">
-                  <caret line="1366" column="46" selection-start-line="1366" selection-start-column="46" selection-end-line="1366" selection-end-column="46" />
                 </state>
               </provider>
             </entry>
@@ -174,12 +112,24 @@
       <find>prient</find>
       <find>read_only</find>
       <find>get_readonly_fi</find>
-      <find>readonly</find>
       <find>readonly_fields</find>
       <find>get_readonly_fields</find>
       <find>get_read_only_fields</find>
       <find>Config</find>
       <find>create_order_form_goods</find>
+      <find>layout</find>
+      <find>formfield_for_dbfield</find>
+      <find>prepare_value</find>
+      <find>__deepcopy</find>
+      <find>inline</find>
+      <find>readonly</find>
+      <find>instance_form</find>
+      <find>permission</find>
+      <find>post</find>
+      <find>inlines</find>
+      <find>Stor</find>
+      <find>ba</find>
+      <find>fini</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -211,22 +161,24 @@
         <option value="$PROJECT_DIR$/erp/erp/settings.py" />
         <option value="$PROJECT_DIR$/erp/xadmin/views/base.py" />
         <option value="$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/edit.py" />
-        <option value="$PROJECT_DIR$/erp/xadmin/views/edit.py" />
         <option value="$PROJECT_DIR$/erp/db_script/SendMsg.py" />
         <option value="$PROJECT_DIR$/erp/xadmin/plugins/myplugin.py" />
         <option value="$PROJECT_DIR$/erp/script/SendMsg.py" />
         <option value="$PROJECT_DIR$/erp/script/__init__.py" />
-        <option value="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py" />
         <option value="$PROJECT_DIR$/erp/xadmin/plugins/__init__.py" />
-        <option value="$PROJECT_DIR$/erp/InfoManage/models.py" />
+        <option value="$PROJECT_DIR$/erp/xadmin/views/edit.py" />
+        <option value="$PROJECT_DIR$/erp/xadmin/plugins/inline.py" />
+        <option value="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py" />
         <option value="$PROJECT_DIR$/erp/InfoManage/adminx.py" />
+        <option value="$PROJECT_DIR$/erp/InfoManage/models.py" />
         <option value="$PROJECT_DIR$/erp/xadmin/plugins/myplugin/stor_plugin.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="height" value="797" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -236,6 +188,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -252,22 +205,13 @@
               <item name="graduate" type="b2602c69:ProjectViewProjectNode" />
               <item name="graduate" type="462c0819:PsiDirectoryNode" />
               <item name="erp" type="462c0819:PsiDirectoryNode" />
-              <item name="xadmin" type="462c0819:PsiDirectoryNode" />
+              <item name="users" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="graduate" type="b2602c69:ProjectViewProjectNode" />
               <item name="graduate" type="462c0819:PsiDirectoryNode" />
               <item name="erp" type="462c0819:PsiDirectoryNode" />
               <item name="xadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="graduate" type="b2602c69:ProjectViewProjectNode" />
-              <item name="graduate" type="462c0819:PsiDirectoryNode" />
-              <item name="erp" type="462c0819:PsiDirectoryNode" />
-              <item name="xadmin" type="462c0819:PsiDirectoryNode" />
-              <item name="plugins" type="462c0819:PsiDirectoryNode" />
-              <item name="myplugin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="graduate" type="b2602c69:ProjectViewProjectNode" />
@@ -280,7 +224,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -373,16 +316,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="797" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.122621566" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.088794924" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32969698" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32969698" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.30060607" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.25142857" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -420,38 +364,10 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/conf/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/actions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="155" column="35" lean-forward="true" selection-start-line="155" selection-start-column="35" selection-end-line="155" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/bookmark.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="126" column="11" selection-start-line="126" selection-start-column="11" selection-end-line="126" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/utils/functional.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="213">
@@ -662,13 +578,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/views/edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7245">
-          <caret line="505" column="11" selection-start-line="505" selection-start-column="11" selection-end-line="505" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/contrib/admin/options.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19755">
@@ -690,48 +599,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/erp/users/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin.py" />
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/forms/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7860">
-          <caret line="542" column="39" selection-start-line="542" selection-start-column="39" selection-end-line="542" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/crispy_forms/layout.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1980">
           <caret line="141" selection-start-line="141" selection-end-line="141" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2550">
-          <caret line="189" column="30" selection-start-line="189" selection-start-column="30" selection-end-line="189" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/views/form.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/views/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6825">
-          <caret line="487" selection-start-line="487" selection-end-line="487" />
         </state>
       </provider>
     </entry>
@@ -749,42 +621,112 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py">
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/forms/fields.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2805">
-          <caret line="193" column="67" selection-start-line="193" selection-start-column="29" selection-end-line="193" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#126#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="11355">
+          <caret line="788" column="21" selection-start-line="788" selection-start-column="21" selection-end-line="788" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/forms/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1377">
+          <caret line="880" column="58" lean-forward="true" selection-start-line="880" selection-start-column="58" selection-end-line="880" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/widgets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/db/models/options.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7999">
+          <caret line="595" column="8" selection-start-line="595" selection-start-column="8" selection-end-line="595" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/django/forms/widgets.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3812">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/erp/xadmin/views/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="581" lean-forward="true" selection-start-line="581" selection-end-line="581" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/inline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="242" column="92" selection-start-line="242" selection-start-column="92" selection-end-line="242" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/erp/xadmin/views/edit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5014">
+          <caret line="208" column="5" lean-forward="true" selection-start-line="208" selection-start-column="5" selection-end-line="208" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/erp/users/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/xadmin/views/edit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-988">
+          <caret line="430" column="6" selection-start-line="430" selection-start-column="6" selection-end-line="430" selection-end-column="6" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/erp/InfoManage/adminx.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1590">
-          <caret line="109" column="27" selection-start-line="109" selection-start-column="27" selection-end-line="109" selection-end-column="27" />
+        <state relative-caret-position="2145">
+          <caret line="147" column="26" selection-start-line="147" selection-start-column="26" selection-end-line="147" selection-end-column="26" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/erp/InfoManage/models.py">
+    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin/stor_plugin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="57" column="21" lean-forward="true" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="21" />
+        <state relative-caret-position="133">
+          <caret line="77" column="37" lean-forward="true" selection-start-line="77" selection-start-column="37" selection-end-line="77" selection-end-column="37" />
           <folding>
-            <element signature="e#0#53#0" expanded="true" />
+            <element signature="e#0#126#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin/stor_plugin.py">
+    <entry file="file://$PROJECT_DIR$/erp/xadmin/plugins/myplugin/order_plugin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="30" column="62" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+        <state relative-caret-position="1125">
+          <caret line="171" column="73" selection-start-line="171" selection-start-column="73" selection-end-line="171" selection-end-column="73" />
           <folding>
             <element signature="e#0#126#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/erp/InfoManage/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="173" lean-forward="true" selection-start-line="173" selection-end-line="173" />
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
           </folding>
         </state>
       </provider>

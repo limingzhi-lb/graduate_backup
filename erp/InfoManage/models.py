@@ -40,11 +40,11 @@ class Vender(models.Model):
     def __str__(self):
         return self.ven_name
 
-
+'''
 class Stor(models.Model):
     # s_id = models.IntegerField(primary_key=True)
     s_name = models.CharField('仓库名', max_length=12)
-    valid = models.BooleanField('可用', default=1)
+    valid = models.BooleanField('可用', default=True)
 
     class Meta:
         db_table = 'Stor'
@@ -53,6 +53,7 @@ class Stor(models.Model):
 
     def __str__(self):
         return self.s_name
+'''
 
 
 class StorDetail(models.Model):
@@ -60,7 +61,7 @@ class StorDetail(models.Model):
     num = models.IntegerField('数量')
     # s_name = models.CharField('仓库名', max_length=12)
     # s_name = models.ForeignKey('仓库名', Stor.s_name)
-    s_name = models.ForeignKey(Stor, related_name='stor_detail_s_name', verbose_name='仓库')
+    # s_name = models.ForeignKey(Stor, related_name='stor_detail_s_name', verbose_name='仓库')
 
     class Meta:
         db_table = 'StorDetail'
@@ -79,7 +80,7 @@ class OrderForm(models.Model):
     # ven_id = models.IntegerField()
     created = models.DateTimeField('创建时间')
     # s_name = models.ForeignKey('存入仓库', Stor, related_name='s_name')
-    s_name = models.ForeignKey(Stor, related_name='order_form_s_name', verbose_name='仓库')
+    # s_name = models.ForeignKey(Stor, related_name='order_form_s_name', verbose_name='仓库')
     delivery = models.DateTimeField('交货时间', blank=True, null=True)
     typ = models.BooleanField('采购订单', default=True)
     receipt_status = models.BooleanField('已收货', default=False)
@@ -103,10 +104,10 @@ class OrderFormGoods(models.Model):
     # rm_name = models.ForeignKey('材料', RawMaterial, related_name='rm_name')
     rm_name = models.ForeignKey(RawMaterial, related_name='order_form_goods_rm_name', verbose_name='材料')
     # of_id = models.IntegerField(primary_key=True)
-    num = models.IntegerField('数量')
+    num = models.IntegerField('数量', null=True)
     # of_name = models.ForeignKey('订单名', OrderForm, related_name='of_name')
     of_name = models.ForeignKey(OrderForm, related_name='order_form_goods_of_name', verbose_name='订单')
-    batch_number = models.CharField('批次号', max_length=8, blank=True)
+    # batch_number = models.CharField('批次号', max_length=8, blank=True)
 
     class Meta:
         db_table = 'OrderFormGoods'
@@ -117,7 +118,7 @@ class OrderFormGoods(models.Model):
     def __str__(self):
         return self.rm_name.rm_name
 
-
+'''
 class SwapForm(models.Model):
     __name__ = 'SwapForm'
     sf_name = models.CharField('表名', max_length=48, unique=True)
@@ -157,18 +158,18 @@ class SwapFormDetail(models.Model):
 
     def __str__(self):
         return self.good_name.good_name
-
+'''
 
 class OutStorForm(models.Model):
-    osf_name = models.CharField('表名', max_length=32)
+    osf_name = models.CharField('表名', max_length=32, unique=True)
     created = models.DateTimeField('创建时间')
     # after_s_name = models.ForeignKey('前仓库', Stor, related_name='s_name')
-    after_s_name = models.ForeignKey(Stor, related_name='out_store_form_s_name', verbose_name='原仓库')
+    # after_s_name = models.ForeignKey(Stor, related_name='out_store_form_s_name', verbose_name='原仓库')
     # staff_id = models.ForeignKey('新仓库', User, related_name='username')
     staff_id = models.ForeignKey(User, related_name='out_store_form_username', verbose_name='执行人')
-    check = models.BooleanField('是否确认', default=0)
-    note = models.CharField('备注', max_length=64)
-    finished = models.DateTimeField('完成时间')
+    check = models.BooleanField('是否确认', default=False, blank=True)
+    note = models.CharField('备注', max_length=64, blank=True, null=True)
+    finished = models.DateTimeField('完成时间', blank=True, null=True)
     # osd_id = ArrayField(models.IntegerField())
 
     class Meta:
@@ -271,7 +272,7 @@ class ProduceForm(models.Model):
     note = models.TextField('备注')
     is_finish = models.BooleanField('是否完成', default=0)
     # s_name = models.ForeignKey('仓库名', Stor, related_name='s_name')
-    s_name = models.ForeignKey(Stor, related_name='produce_form_s_name', verbose_name='仓库')
+    # s_name = models.ForeignKey(Stor, related_name='produce_form_s_name', verbose_name='仓库')
     qualified_rate = models.FloatField('合格率')
 
     class Meta:
@@ -322,7 +323,7 @@ class SaleForm(models.Model):
     created = models.DateTimeField('创建时间')
     deliver_date = models.DateTimeField('交货时间')
     # s_name = models.ForeignKey('仓库名', Stor, related_name='s_name')
-    s_name = models.ForeignKey(Stor, related_name='sale_form_s_name', verbose_name='仓库')
+    # s_name = models.ForeignKey(Stor, related_name='sale_form_s_name', verbose_name='仓库')
     state = models.BooleanField('是否发货', default=0)
     # pro_name = ArrayField(models.IntegerField())
     check = models.BooleanField('是否确认', default=0)

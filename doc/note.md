@@ -10,7 +10,27 @@
 
 ##微信通知部分添加好友或修改备注之后要刷新或重新加载，也可能是备注是数字的原因，尝试其他备注（尽量不重新登录）
 
-## 外键的下拉选择要进行过滤
+## 外键的下拉选择要进行过滤 （使用formfield_for_dbfield）
+
+### 先判断该object是哪个下拉框，然后查询数据库，设置新的queryset (check)
+
+
+
+# 出库表单添加和更新
+
+## 只读
+
+### 添加
+
+确认和完成时间等只读
+
+###更新（创建时间一直已读）
+
+按角色和表单状态划分，如果已确认，全只读。未确认但已完成，leader可确认，其余人全只读。未完成但当前用户是执行人，如果是leader，放开确认权限，不是则确认字段只读。如果当前用户是leader不是执行人，完成时间和确认只读，既不是leader也不是执行人全已读
+
+## 更新表单
+
+更新了执行人则确认和完成时间字段置空，如果确认勾选判断完成时间，没填则填写。
 
 
 
@@ -26,7 +46,3 @@
 
 create trigger update_stor_detail after update on OrderForm  for each row if new.is_finish=True then update StorDetail set num=(select sum(num*(select price from RawMaterial where id=OrderFormGoods.rm_name_id)) 
 
-
-
-{'instance': <OrderForm: 18.4.28采购原材料1-3>, 'data': <QueryDict: {'csrfmiddlewaretoken': ['j41BHVSuHBpeeuHtwUutLTrqBPNN9JKO0zpeHj5qmLabMzjCxLpnxYuDYrm5PZe8', 'j41BHVSuHBpeeuHtwUutLTrqBPNN9JKO0zqmLabMzjCxLpnxYuDYrm5PZe8'], 'delivery_0': ['2018/04/29'], 'delivery_1': ['14:33'], 'storage_time_0': ['2018/04/29'], 'storage_time_1': ['14:31'], '_save': ['']}>, 'files': <MultiValueDict: {}>}
-9
