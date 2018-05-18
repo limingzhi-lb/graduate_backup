@@ -203,6 +203,8 @@ class OutStorDetail(models.Model):
 class Product(models.Model):
     pro_name = models.CharField('产品名', max_length=8)
     price = models.FloatField('价格')
+    created = models.DateTimeField('创建时间')
+    updated = models.DateTimeField('更新时间')
 
     class Meta:
         db_table = 'Product'
@@ -215,6 +217,8 @@ class Product(models.Model):
 
 class HalfProduct(models.Model):
     hp_name = models.CharField('半成品名', max_length=8)
+    created = models.DateTimeField('创建时间')
+    updated = models.DateTimeField('更新时间')
 
     class Meta:
         db_table = 'HalfProduct'
@@ -230,9 +234,11 @@ class Meterial(models.Model):
     name = models.ForeignKey(StorDetail, related_name='meterial_good_name', verbose_name='材料')
     num = models.IntegerField('数量')
     # product = models.ForeignKey('成品', Product, related_name='pro_name', null=True)
-    product = models.ForeignKey(Product, related_name='meterial_pro_name', null=True, verbose_name='成品')
+    product = models.ForeignKey(Product, related_name='meterial_pro_name', null=True, verbose_name='成品',blank=True)
     # half_product = models.ForeignKey('半成品', HalfProduct, related_name='hp_name', null=True)
-    hp_name = models.ForeignKey(HalfProduct, related_name='meterial_hp_name', null=True, verbose_name='半成品')
+    hp_name = models.ForeignKey(HalfProduct, related_name='meterial_hp_name', null=True, verbose_name='半成品', blank=True)
+    created = models.DateTimeField('创建时间')
+    updated = models.DateTimeField('更新时间')
 
     class Meta:
         # unique_together = ('name', 'num')
@@ -246,6 +252,9 @@ class Meterial(models.Model):
 
 class AssemblyLine(models.Model):
     ass_name = models.CharField('名称', max_length=24)
+    leader = models.ForeignKey(User, related_name='AsseblyLine', verbose_name='负责人')
+    created = models.DateTimeField('创建时间')
+    updated = models.DateTimeField('更新时间')
 
     class Meta:
         db_table = 'AssemblyLine'
@@ -257,23 +266,23 @@ class AssemblyLine(models.Model):
 
 
 class ProduceForm(models.Model):
-    pf_name = models.CharField('表名', max_length=32)
+    pf_name = models.CharField('表名', max_length=32, unique=True)
     # pro_name = models.ForeignKey('成品', Product, related_name='pro_name')
-    pro_name = models.ForeignKey(Product, related_name='produce_form_pro_name', verbose_name='成品')
-    pro_num = models.IntegerField('成品数量')
+    pro_name = models.ForeignKey(Product, related_name='produce_form_pro_name', verbose_name='成品', blank=True, null=True)
+    pro_num = models.IntegerField('成品数量', blank=True, null=True)
     # hpro_name = models.ForeignKey('半成品', HalfProduct, related_name='hp_name')
-    hpro_name = models.ForeignKey(HalfProduct, related_name='produce_form_hp_name', verbose_name='半成品')
-    hpro_num = models.IntegerField('半成品数量')
+    hpro_name = models.ForeignKey(HalfProduct, related_name='produce_form_hp_name', verbose_name='半成品', blank=True, null=True)
+    hpro_num = models.IntegerField('半成品数量', blank=True, null=True)
     created = models.DateTimeField('创建时间')
     # assembly_line = models.ForeignKey('生产线', AssemblyLine, related_name='ass_name')
     assembly_line = models.ForeignKey(AssemblyLine, related_name='produce_form_ass_name', verbose_name='生产线')
-    actual_num = models.IntegerField('实际数量')
-    is_instor = models.BooleanField('是否入库', default=0)
-    note = models.TextField('备注')
-    is_finish = models.BooleanField('是否完成', default=0)
+    actual_num = models.IntegerField('实际数量', blank=True, null=True)
+    is_instor = models.BooleanField('是否入库', default=False, blank=True)
+    is_finish = models.BooleanField('是否完成', default=False, blank=True)
     # s_name = models.ForeignKey('仓库名', Stor, related_name='s_name')
     # s_name = models.ForeignKey(Stor, related_name='produce_form_s_name', verbose_name='仓库')
-    qualified_rate = models.FloatField('合格率')
+    qualified_rate = models.FloatField('合格率', blank=True, null=True)
+    note = models.TextField('备注', blank=True)
 
     class Meta:
         db_table = 'ProduceForm'
@@ -287,7 +296,7 @@ class ProduceForm(models.Model):
 class WasteForm(models.Model):
     name = models.ForeignKey(StorDetail, related_name='waste_form_good_name', verbose_name='材料')
     num = models.IntegerField('数量')
-    pf_name = models.IntegerField('生产目标表')
+    pf_name = models.ForeignKey(ProduceForm, related_name='waste_product', verbose_name='生产目标表')
 
     class Meta:
         db_table = 'WasteForm'
@@ -314,20 +323,20 @@ class Customer(models.Model):
 
 
 class SaleForm(models.Model):
-    sf_name = models.CharField('表名', max_length=32)
+    sf_name = models.CharField('表名', max_length=32, unique=True)
     # staff_name = models.ForeignKey('执行人', User, related_name='username')
     staff_name = models.ForeignKey(User, related_name='sale_form_username', verbose_name='执行人')
     # c_name = models.ForeignKey('客户', Customer, related_name='c_name')
     c_name = models.ForeignKey(Customer, related_name='sale_form_c_name', verbose_name='客户')
-    price = models.FloatField('价格')
+    price = models.FloatField('价格', null=True, blank=True)
     created = models.DateTimeField('创建时间')
-    deliver_date = models.DateTimeField('交货时间')
+    deliver_date = models.DateField('交货时间', null=True, blank=True)
     # s_name = models.ForeignKey('仓库名', Stor, related_name='s_name')
     # s_name = models.ForeignKey(Stor, related_name='sale_form_s_name', verbose_name='仓库')
-    state = models.BooleanField('是否发货', default=0)
+    state = models.BooleanField('是否发货', default=False, blank=True)
     # pro_name = ArrayField(models.IntegerField())
-    check = models.BooleanField('是否确认', default=0)
-    out_stor_date = models.DateTimeField('出库时间')
+    check = models.BooleanField('是否确认', default=False, blank=True)
+    out_stor_date = models.DateTimeField('出库时间', null=True, blank=True)
 
     class Meta:
         db_table = 'SaleForm'
@@ -344,7 +353,6 @@ class SaleFormProduct(models.Model):
     # pro_name = models.ForeignKey('产品名', Product, related_name='pro_name')
     pro_name = models.ForeignKey(Product, related_name='sale_form_product_pro_name', verbose_name='产品')
     num = models.IntegerField('数量')
-    price = models.IntegerField('价格')
 
     class Meta:
         db_table = 'SaleFormProduct'

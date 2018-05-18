@@ -31,6 +31,8 @@ PLUGINS = (
     'importexport',
     'myplugin.order_plugin',
     'myplugin.stor_plugin',
+    'myplugin.product_plugin',
+    'myplugin.sale_plugin',
 )
 
 

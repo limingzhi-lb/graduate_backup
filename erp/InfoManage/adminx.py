@@ -153,45 +153,59 @@ class OutStoreFormAdmin(object):
     # inlines = [OutStorDetailInline, ]
 
 
-class ProductAdmin(object):
-    list_display = ['pro_name', 'price']
-    search_fields = ['pro_name', 'price']
-    list_filter = ['pro_name', 'price']
-    list_per_page = 5
-
-
-class HalfproductAdmin(object):
-    list_display = ['hp_name']
-    search_fields = ['hp_name']
-    list_filter = ['hp_name']
-    list_per_page = 5
-
-
-class MeterialAdmin(object):
-    list_display = ['m_id', 'name', 'num', 'product', 'hp_name']
-    search_fields = ['m_id', 'name', 'num', 'product', 'hp_name']
-    list_filter = ['m_id', 'name', 'num', 'product', 'hp_name']
-    list_per_page = 5
-
-
-class AssembliLineAdmin(object):
+class AssemblyLineAdmin(object):
     list_display = ['ass_name']
     search_fields = ['ass_name']
     list_filter = ['ass_name']
     list_per_page = 5
 
 
+class ProductAdmin(object):
+    product = True
+
+    list_display = ['pro_name', 'price', 'created', 'updated']
+    search_fields = ['pro_name', 'price', 'created', 'updated']
+    list_filter = ['pro_name', 'price', 'created', 'updated']
+    list_per_page = 5
+
+
+class HalfproductAdmin(object):
+    half_product = True
+    list_display = ['hp_name', 'created', 'updated']
+    search_fields = ['hp_name', 'created', 'updated']
+    list_filter = ['hp_name', 'created', 'updated']
+    list_per_page = 5
+
+
+class MeterialAdmin(object):
+    list_display = ['name', 'num', 'product', 'hp_name', 'created', 'updated']
+    search_fields = ['name', 'num', 'product', 'hp_name', 'created', 'updated']
+    list_filter = ['name', 'num', 'product', 'hp_name', 'created', 'updated']
+    list_per_page = 5
+
+
+class AssembliLineAdmin(object):
+    assembly_line = True
+    list_display = ['ass_name', 'leader']
+    search_fields = ['ass_name', 'leader']
+    list_filter = ['ass_name', 'leader']
+    list_per_page = 5
+
+
 class ProduceFormAdmin(object):
+    create_produce = True
+    update_produce = True
     list_display = ['pf_name', 'pro_name', 'pro_num', 'hpro_name', 'hpro_num', 'created',
-                    'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 's_name', 'qualified_rate']
+                    'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 'qualified_rate']
     search_fields = ['pf_name', 'pro_name', 'pro_num', 'hpro_name', 'hpro_num', 'created',
-                     'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 's_name', 'qualified_rate']
+                     'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 'qualified_rate']
     list_filter = ['pf_name', 'pro_name', 'pro_num', 'hpro_name', 'hpro_num', 'created',
-                   'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 's_name', 'qualified_rate']
+                   'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 'qualified_rate']
     list_per_page = 5
 
 
 class WasteFormAdmin(object):
+    waste_form = True
     list_display = ['name', 'num', 'pf_name']
     search_fields = ['name', 'num', 'pf_name']
     list_filter = ['name', 'num', 'pf_name']
@@ -205,26 +219,28 @@ class CustomerAdmin(object):
     list_per_page = 5
 
 
-class SaleFormProductInline(object):
-    model = SaleFormProduct
-    extra = 0
-
-
 class SaleFormAdmin(object):
+    sale_form = True
     list_display = ['sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
-                    's_name', 'state', 'check', 'out_stor_date']
+                     'state', 'check', 'out_stor_date']
     search_fields = ['sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
-                     's_name', 'state', 'check', 'out_stor_date']
+                      'state', 'check', 'out_stor_date']
     list_filter = ['sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
-                   's_name', 'state', 'check', 'out_stor_date']
+                   'state', 'check', 'out_stor_date']
     list_per_page = 5
     # inlines = [SaleFormProductInline, ]
+    data_charts = {
+        "user_count": {'title': u"销售业绩", "x-field": "deliver_date", "y-field": ("price",),
+                       "order": ('price',)},
+        # "avg_count": {'title': u"Avg Report", "x-field": "date", "y-field": ('avg_count',), "order": ('date',)}
+    }
 
 
 class SaleFormProductAdmin(object):
-    list_display = ['sf_name', 'pro_name', 'num', 'price']
-    search_fields = ['sf_name', 'pro_name', 'num', 'price']
-    list_filter = ['sf_name', 'pro_name', 'num', 'price']
+    sale_form_product = True
+    list_display = ['sf_name', 'pro_name', 'num']
+    search_fields = ['sf_name', 'pro_name', 'num']
+    list_filter = ['sf_name', 'pro_name', 'num']
     list_per_page = 5
 
 
@@ -246,15 +262,17 @@ xadmin.site.register(OrderFormGoods, OrderFormGoodsAdmin)
 # xadmin.site.register(Stor, StorAdmin)
 # xadmin.site.register(SwapForm, SwapFormAdmin)
 # xadmin.site.register(SwapFormDetail, SwapFormDetailAdmin)
+xadmin.site.register(StorDetail, StorDetailAdmin)
 xadmin.site.register(OutStorForm, OutStoreFormAdmin)
 xadmin.site.register(OutStorDetail, OutStorDetailAdmin)
+xadmin.site.register(AssemblyLine, AssembliLineAdmin)
 xadmin.site.register(Product, ProductAdmin)
 xadmin.site.register(HalfProduct, HalfproductAdmin)
+xadmin.site.register(Meterial, MeterialAdmin)
 xadmin.site.register(ProduceForm, ProduceFormAdmin)
 xadmin.site.register(WasteForm, WasteFormAdmin)
 xadmin.site.register(Customer, CustomerAdmin)
 xadmin.site.register(SaleForm, SaleFormAdmin)
 xadmin.site.register(SaleFormProduct, SaleFormProductAdmin)
-xadmin.site.register(StorDetail, StorDetailAdmin)
 
 

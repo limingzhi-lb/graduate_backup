@@ -90,7 +90,11 @@ class UpdateOutStorForm(BaseAdminPlugin):
                     elif not new_data['data']['finished_0']:
                         new_data['data']['finished_0'] = today
                         new_data['data']['finished_1'] = now
-
+                os_infos = OutStorDetail.objects.filter(osf_name=self.of_id)
+                for os_info in os_infos:
+                    os_info.good_name.num -= os_info.num
+                    os_info.good_name.save()
+        # print(os_info[0].good_name.num)
         return new_data
 
 
@@ -109,15 +113,22 @@ class OutStorDetailForm(BaseAdminPlugin):
             stor_info = StorDetail.objects.get(id=good_name)
             if int(stor_info.num) < int(new_data['data']['num']):
                 new_data['data']['num'] = stor_info.num
+            # stor_info.num -= new_data['data']['num']
+            # stor_info.save()
         return new_data
 
-    def get_read_only_fields(self, readonly_fields, *args, **kwargs):
-        # if SwapForm.objects.get(id=self.sf_id).staff_name == self.
-        # readonly_fields = ('finished', 'check')
-        return readonly_fields
+    def formfield_for_dbfield(self, data, *args, **kwargs):
+        if isinstance(data, ModelChoiceField):
+            queryset = data._get_queryset()
+            if isinstance(queryset[0], OutStorForm):
+                queryset = OutStorForm.objects.filter(check=False)
+                # queryset = group.user_set.all()
+                print(queryset)
+                data._set_queryset(queryset)
+        return data
 
 
-# TODO 添加领导和普通员工的readonly，设置只有执行人能填写完成时间，完成时间填完发微信通知领导确认
+# TODO 完成时间填完发微信通知领导确认
 class UpdateOutStorDetailForm(BaseAdminPlugin):
     out_stor_detail = False
     good_id = None
@@ -130,7 +141,14 @@ class UpdateOutStorDetailForm(BaseAdminPlugin):
         osf_good = OutStorDetail.objects.get(id=self.good_id)
         if osf_good.osf_name.check:
             readonly_fields = ('good_name', 'num', 'osf_name')
-
+            return readonly_fields
+        if self.user.is_leader:
+            readonly_fields = ()
+            return readonly_fields
+        if osf_good.osf_name.staff_id.id != self.user.id:
+            readonly_fields = ('good_name', 'num', 'osf_name')
+        else:
+            readonly_fields = ()
         return readonly_fields
 
 

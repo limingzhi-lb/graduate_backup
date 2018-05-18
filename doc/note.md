@@ -44,5 +44,4 @@
 
 
 
-create trigger update_stor_detail after update on OrderForm  for each row if new.is_finish=True then update StorDetail set num=(select sum(num*(select price from RawMaterial where id=OrderFormGoods.rm_name_id)) 
-
+create trigger update_sf_price after update on SaleFormProduct  for each row update SaleForm set price=(select sum(num*(select price from Product where id=SaleFormProduct.pro_name_id)) from SaleFormProduct where sf_name_id=SaleForm.id);
