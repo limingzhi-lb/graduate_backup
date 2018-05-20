@@ -7,6 +7,7 @@ from django.forms.models import ModelChoiceField
 from django.contrib.auth.models import Group
 from users.models import User
 import datetime
+from script.SendMsg import SendMsg
 config = Config()
 
 
@@ -19,20 +20,27 @@ class CreateSaleFormPlugin(BaseAdminPlugin):
     def formfield_for_dbfield(self, data, *args, **kwargs):
         if isinstance(data, ModelChoiceField):
             queryset = data._get_queryset()
-            if isinstance(queryset[0], User):
-                group = Group.objects.get(name=config['sale'])
-                queryset = group.user_set.all()
-                data._set_queryset(queryset)
+            try:
+                if isinstance(queryset[0], User):
+                    group = Group.objects.get(name=config['sale'])
+                    queryset = group.user_set.all()
+                    data._set_queryset(queryset)
+            except:
+                pass
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.all()[0].name == config['manage']:
+            readonly_fields = ()
+            return readonly_fields
         readonly_fields = ('price', 'deliver_date', 'state', 'check', 'out_stor_date')
         return readonly_fields
 
     def get_form_datas(self, data):
         new_data = deepcopy(data)
         if 'data' in new_data.keys():
-            pass
+            send = SendMsg(config['stor'], '有订单产品需要出库，请尽快操作')
+            send.send()
         return new_data
 
 
@@ -54,6 +62,9 @@ class UpdateSaleFormPlugin(BaseAdminPlugin):
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.all()[0].name == config['manage']:
+            readonly_fields = ()
+            return readonly_fields
         readonly_fields = ('sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
                            'state', 'check', 'out_stor_date')
         sf = SaleForm.objects.get(id=self.sf_id)
@@ -94,9 +105,13 @@ class UpdateSaleFormPlugin(BaseAdminPlugin):
                     elif not new_data['data']['out_stor_date_0']:
                         new_data['data']['out_stor_date_0'] = today
                         new_data['data']['out_stor_date_1'] = now
+                send = SendMsg(config['produce'], '有订单出库需要确认，请尽快操作')
+                send.send()
             if 'out_stor_date_0' in new_data['data'].keys():
                 if new_data['data']['out_stor_date_0']:
                     new_data['data']['state'] = 'on'
+                send = SendMsg(config['produce'], '有订单出库需要确认，请尽快操作')
+                send.send()
         return new_data
 
 
@@ -116,7 +131,9 @@ class CreateSaleFormProductPlugin(BaseAdminPlugin):
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
-        readonly_fields = ('price',)
+        if self.user.groups.all()[0].name == config['manage']:
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
     def get_form_datas(self, data):
@@ -128,9 +145,11 @@ class CreateSaleFormProductPlugin(BaseAdminPlugin):
             print(product)
 
             stordetail = StorDetail.objects.filter(good_name=product.pro_name)
+            if not stordetail:
+                new_data['data']['num'] = '0'
+                return new_data
             if int(new_data['data']['num']) > stordetail[0].num:
                 new_data['data']['num'] = str(stordetail[0].num)
-            new_data['data']['price'] = str(product.price*int(new_data['data']['num']))
             sale_form = SaleForm.objects.get(id=new_data['data']['sf_name'])
             if sale_form.price:
                 sale_form.price += product.price*int(new_data['data']['num'])
@@ -159,23 +178,26 @@ class UpdateSaleFormProductPlugin(BaseAdminPlugin):
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
-        readonly_fields = ('price',)
+
         sf = SaleFormProduct.objects.get(id=self.sfp_id)
         if sf.sf_name.check:
             readonly_fields = ('sf_name', 'pro_name', 'num')
+        if self.user.groups.all()[0].name == config['manage']:
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
     def get_form_datas(self, data):
         new_data = deepcopy(data)
         # print(new_data)
         if 'data' in new_data.keys():
-            product = Product.objects.get(id=data['data']['pro_name'])
-            stordetail = StorDetail.objects.filter(good_name=product.pro_name)
-            if int(new_data['data']['num']) > stordetail[0].num:
-                new_data['data']['num'] = str(stordetail[0].num)
+            if 'pro_name' in new_data['data'].keys():
+                product = Product.objects.get(id=new_data['data']['pro_name'])
+                stordetail = StorDetail.objects.filter(good_name=product.pro_name)
+                if int(new_data['data']['num']) > stordetail[0].num:
+                    new_data['data']['num'] = str(stordetail[0].num)
         # print(new_data)
         return new_data
-
 
 
 xadmin.site.register_plugin(CreateSaleFormPlugin, CreateAdminView)

@@ -1,5 +1,4 @@
-from xadmin.views import BaseAdminPlugin, ListAdminView, ModelFormAdminView, CreateAdminView, UpdateAdminView, DetailAdminView
-from xadmin.plugins.inline import InlineModelAdmin
+from xadmin.views import BaseAdminPlugin, ModelFormAdminView, CreateAdminView, UpdateAdminView
 import xadmin
 from copy import deepcopy
 from InfoManage.models import *
@@ -19,16 +18,17 @@ class CreateOrderFormPlugin(BaseAdminPlugin):
         return bool(self.create_order_form)
 
     def get_form_datas(self, data):
-        # print(data)
         if 'data' in data.keys():
             new_data = deepcopy(data)
-            # print(type(new_data['data']))
             new_data['data']['payment_status'] = ''
             new_data['data']['is_finish'] = ''
             return new_data
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         readonly_fields = ['delivery', 'receipt_status', 'payment_status', 'total_price', 'storage_time', 'is_finish']
         return readonly_fields
 
@@ -42,6 +42,9 @@ class UpdateOrderFormGoodsPlugin(BaseAdminPlugin):
         return bool(self.order_form_goods)
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         of_good = OrderFormGoods.objects.get(id=self.of_good_id)
         if of_good.of_name.is_finish:
             readonly_fields = ('rm_name', 'num', 'of_name')
@@ -92,11 +95,7 @@ class OrderFormPlugin(BaseAdminPlugin):
                 group = Group.objects.get(name=config['purchase'])
                 queryset = group.user_set.all()
                 data._set_queryset(queryset)
-            # elif isinstance(queryset[0], Stor):
-            #     queryset = Stor.objects.filter(valid=True)
-            #     data._set_queryset(queryset)
         return data
-
 
 
 class UpdateOrderFormByPurchase(BaseAdminPlugin):
@@ -111,6 +110,9 @@ class UpdateOrderFormByPurchase(BaseAdminPlugin):
         return bool(self.update_order_form and is_purchase)
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         if OrderForm.objects.get(id=self.of_id).is_finish:
             readonly_fields = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status',
                                'payment_status', 'total_price', 'executor', 'storage_time', 'is_finish']
@@ -178,6 +180,8 @@ class UpdateOrderFormByStor(BaseAdminPlugin):
                 elif not new_data['data']['storage_time_0']:
                     new_data['data']['storage_time_0'] = new_data['data']['delivery_0']
                     new_data['data']['storage_time_1'] = new_data['data']['delivery_1']
+                send = SendMsg(config['purchase'], '有一个订单需要确认，请尽快操作')
+                send.send()
             elif 'delivery_0' in new_data['data'].keys():
                 if new_data['data']['delivery_0'] or new_data['data']['storage_time_0']:
                     new_data['data']['receipt_status'] = 'on'
@@ -200,12 +204,18 @@ class UpdateOrderFormByStor(BaseAdminPlugin):
                     new_data['data']['storage_time_0'] = today
                     if datetime.datetime.strptime(new_data['data']['storage_time_1'], "%H:%M") > now_:
                         new_data['data']['dstorage_time_1'] = now
-                group = 'purchase'
-                msg = u'你有一个订单需要确认，请及时处理。'
-            # SendMsg(group, msg)
+                send = SendMsg(config['purchase'], '有一个订单需要确认，请尽快操作')
+                send.send()
         return new_data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
+        if OrderForm.objects.get(id=self.of_id).receipt_status:
+            readonly_fields = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status',
+                               'payment_status', 'total_price', 'executor', 'storage_time', 'is_finish']
+            return readonly_fields
         if OrderForm.objects.get(id=self.of_id).is_finish:
             readonly_fields = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status',
                                'payment_status', 'total_price', 'executor', 'storage_time', 'is_finish']
@@ -236,12 +246,10 @@ class test(BaseAdminPlugin):
 
 
 xadmin.site.register_plugin(CreateOrderFormPlugin, CreateAdminView)
-# xadmin.site.register_plugin(CreateOrderFormGoodsPlugin, CreateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormByStor, UpdateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormByPurchase, UpdateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormGoodsPlugin, UpdateAdminView)
 xadmin.site.register_plugin(OrderFormGoodsPlugin, ModelFormAdminView)
 xadmin.site.register_plugin(OrderFormPlugin, ModelFormAdminView)
-# xadmin.site.register_plugin(OrderFormGoodsInline, InlineModelAdmin)
 
 

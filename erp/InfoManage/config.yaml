@@ -3,3 +3,4 @@ group:
     stor: '仓库组'
     produce: '生产组'
     sale: '销售组'
+    manage: '管理组'

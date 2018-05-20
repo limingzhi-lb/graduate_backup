@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from users.models import User
 # from django.models
@@ -39,21 +38,6 @@ class Vender(models.Model):
 
     def __str__(self):
         return self.ven_name
-
-'''
-class Stor(models.Model):
-    # s_id = models.IntegerField(primary_key=True)
-    s_name = models.CharField('仓库名', max_length=12)
-    valid = models.BooleanField('可用', default=True)
-
-    class Meta:
-        db_table = 'Stor'
-        verbose_name = '仓库'
-        verbose_name_plural = '仓库'
-
-    def __str__(self):
-        return self.s_name
-'''
 
 
 class StorDetail(models.Model):
@@ -364,5 +348,17 @@ class SaleFormProduct(models.Model):
         return self.sf_name.sf_name
 
 
+class PredictData(models.Model):
+    pro_name = models.ForeignKey(Product, related_name='predict_pro_name', verbose_name='产品')
+    date = models.DateField('日期')
+    num = models.IntegerField('数量')
+
+    class Meta:
+        db_table = 'PredictData'
+        verbose_name = '销量预测'
+        verbose_name_plural = '销量预测'
+
+    def __str__(self):
+        return self.pro_name
 
 

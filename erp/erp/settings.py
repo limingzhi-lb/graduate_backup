@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
     'reversion',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,10 @@ LOGIN_REDIRECT_URL = '/'
 
 # AUTH_USER_MODEL = ''
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+REST_FRAMEWORK = {
+    # 使用Django的标准`django.contrib.auth`权限管理类,
+    # 或者为尚未认证的用户，赋予只读权限.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

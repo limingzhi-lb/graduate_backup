@@ -244,6 +244,10 @@ class SaleFormProductAdmin(object):
     list_per_page = 5
 
 
+class PredictAdmin(object):
+    list_display = ['pro_name', 'date', 'num']
+
+
 class GlobalSetting(object):
     site_title = 'ERP'
     site_footer = '我的公司'
@@ -259,9 +263,6 @@ xadmin.site.register(Vender, VenderAdmin)
 xadmin.site.register(RawMaterial, RawMaterialAdmin)
 xadmin.site.register(OrderForm, OrderFormAdmin)
 xadmin.site.register(OrderFormGoods, OrderFormGoodsAdmin)
-# xadmin.site.register(Stor, StorAdmin)
-# xadmin.site.register(SwapForm, SwapFormAdmin)
-# xadmin.site.register(SwapFormDetail, SwapFormDetailAdmin)
 xadmin.site.register(StorDetail, StorDetailAdmin)
 xadmin.site.register(OutStorForm, OutStoreFormAdmin)
 xadmin.site.register(OutStorDetail, OutStorDetailAdmin)
@@ -274,5 +275,4 @@ xadmin.site.register(WasteForm, WasteFormAdmin)
 xadmin.site.register(Customer, CustomerAdmin)
 xadmin.site.register(SaleForm, SaleFormAdmin)
 xadmin.site.register(SaleFormProduct, SaleFormProductAdmin)
-
-
+xadmin.site.register(PredictData, PredictAdmin)

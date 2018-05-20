@@ -7,6 +7,7 @@ from django.forms.models import ModelChoiceField
 from django.contrib.auth.models import Group
 from users.models import User
 import datetime
+from script.SendMsg import SendMsg
 config = Config()
 
 
@@ -29,6 +30,11 @@ class CreateOutStorForm(BaseAdminPlugin):
         readonly_fields = ('finished', 'check')
         return readonly_fields
 
+    def get_form_datas(self, data):
+        send = SendMsg(config['stor'], '有一个出库订单创建完成需要确认，请尽快操作')
+        send.send()
+        return data
+
 
 class UpdateOutStorForm(BaseAdminPlugin):
     update_out_stor = False
@@ -48,6 +54,9 @@ class UpdateOutStorForm(BaseAdminPlugin):
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         os_form = OutStorForm.objects.get(id=self.of_id)
         if os_form.check:
             readonly_fields = ('osf_name', 'created', 'staff_id', 'note', 'finished', 'check')
@@ -76,12 +85,13 @@ class UpdateOutStorForm(BaseAdminPlugin):
         today = datetime.datetime.now().strftime('%Y/%m/%d')
         now = datetime.datetime.now().strftime("%H:%M:%S")
         if 'data' in new_data.keys():
-            print(new_data)
             if str(os_form.staff_id.id) != str(new_data['data'].get('staff_id') or os_form.staff_id.id):
                 new_data['data']['finished_0'] = ''
                 new_data['data']['finished_1'] = ''
                 if 'check' in new_data['data'].keys():
                     new_data['data']['check'] = ''
+                send = SendMsg(config['stor'], '有一个出库订单被修改需要确认，请尽快操作')
+                send.send()
             elif 'check' in new_data['data'].keys():
                 if new_data['data']['check'] == 'on':
                     if not new_data['data'].get('finished_0'):
@@ -128,7 +138,6 @@ class OutStorDetailForm(BaseAdminPlugin):
         return data
 
 
-# TODO 完成时间填完发微信通知领导确认
 class UpdateOutStorDetailForm(BaseAdminPlugin):
     out_stor_detail = False
     good_id = None
@@ -138,6 +147,9 @@ class UpdateOutStorDetailForm(BaseAdminPlugin):
         return bool(self.out_stor_detail)
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         osf_good = OutStorDetail.objects.get(id=self.good_id)
         if osf_good.osf_name.check:
             readonly_fields = ('good_name', 'num', 'osf_name')
@@ -150,17 +162,6 @@ class UpdateOutStorDetailForm(BaseAdminPlugin):
         else:
             readonly_fields = ()
         return readonly_fields
-
-
-
-
-
-
-
-# class Update
-
-
-
 
 
 

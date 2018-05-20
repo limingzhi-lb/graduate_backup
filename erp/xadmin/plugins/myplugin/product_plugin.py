@@ -1,4 +1,4 @@
-from xadmin.views import BaseAdminPlugin, ListAdminView, ModelFormAdminView, CreateAdminView, UpdateAdminView, DetailAdminView
+from xadmin.views import BaseAdminPlugin,  ModelFormAdminView, CreateAdminView, UpdateAdminView
 import xadmin
 from copy import deepcopy
 from InfoManage.models import *
@@ -6,7 +6,7 @@ from InfoManage.config import Config
 from django.forms.models import ModelChoiceField
 from django.contrib.auth.models import Group
 from users.models import User
-import datetime
+from script.SendMsg import SendMsg
 config = Config()
 
 
@@ -29,6 +29,9 @@ class AssemblyLinePlugin(BaseAdminPlugin):
         readonly_fields = ('ass_name', 'leader', 'created', 'updated')
         if self.user.groups.all()[0].name == config['produce'] and self.user.is_leader:
             readonly_fields = ()
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
 
@@ -42,6 +45,9 @@ class ProductPlugin(BaseAdminPlugin):
         readonly_fields = ('ass_name', 'price', 'created', 'updated')
         if self.user.groups.all()[0].name == config['produce'] and self.user.is_leader:
             readonly_fields = ()
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
 
@@ -55,6 +61,9 @@ class HalfProductPlugin(BaseAdminPlugin):
         readonly_fields = ('hp_name', 'created', 'updated')
         if self.user.groups.all()[0].name == config['produce'] and self.user.is_leader:
             readonly_fields = ()
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
 
@@ -68,6 +77,9 @@ class MeterialPlugin(BaseAdminPlugin):
         readonly_fields = ('name', 'num', 'product', 'hp_name', 'created', 'updated')
         if self.user.groups.all()[0].name == config['produce'] and self.user.is_leader:
             readonly_fields = ('actual_num', 'is_instor', 'is_finish', 'qualified_rate')
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
 
@@ -82,6 +94,9 @@ class CreateProducePlugin(BaseAdminPlugin):
                            'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 'qualified_rate')
         if self.user.groups.all()[0].name == config['produce'] and self.user.is_leader:
             readonly_fields = ('actual_num', 'is_instor', 'is_finish', 'qualified_rate')
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
     def get_form_datas(self, data):
@@ -140,6 +155,9 @@ class UpdateProductPlugin(BaseAdminPlugin):
         return bool(self.update_produce)
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         pf = ProduceForm.objects.get(id=self.product_id)
         readonly_fields = ('pf_name', 'pro_name', 'pro_num', 'hpro_name', 'hpro_num', 'created',
                            'assembly_line', 'actual_num', 'is_instor', 'note', 'is_finish', 'qualified_rate')
@@ -215,7 +233,8 @@ class UpdateProductPlugin(BaseAdminPlugin):
                                             less = int(stor.num) // int(meterial.num)
                                     rw = RawMaterial.objects.get(rm_name=stor.good_name)
                                     if stor.num < rw.minimum_inventory:
-                                        print('发信息补货')
+                                        send = SendMsg(config['purchase'], '有原材料需要补货，请尽快操作')
+                                        send.send()
                 new_data['data']['pro_num'] = str(less)
             if 'hpro_name' in new_data['data'].keys():
                 if not new_data['data']['hpro_name']:
@@ -237,9 +256,10 @@ class UpdateProductPlugin(BaseAdminPlugin):
                                     if int(stor.num) < int(meterial.num)*int(new_data['data']['hpro_num']):
                                         if less > int(stor.num) // int(meterial.num):
                                             less = int(stor.num) // int(meterial.num)
-                                    # rw = RawMaterial.objects.get(rm_name=stor.good_name)
-                                    # if stor.num < rw.minimum_inventory:
-                                    #     print('发信息补货')
+                                    rw = RawMaterial.objects.get(rm_name=stor.good_name)
+                                    if stor.num < rw.minimum_inventory:
+                                        send = SendMsg(config['purchase'], '有原材料需要补货，请尽快操作')
+                                        send.send()
                 new_data['data']['hpro_num'] = str(less)
             if new_data['data'].get('is_finish'):
                 pro_name = pf.pro_name
@@ -249,29 +269,18 @@ class UpdateProductPlugin(BaseAdminPlugin):
                 meterials = Meterial.objects.all()
                 stors = StorDetail.objects.all()
                 if pro_num:
-                    # for meterial in meterials:
-                    #     if meterial.product:
-                    #         if meterial.product.pro_name == pro_name.pro_name:
-                                # for stor in stors:
-                                #     if stor.good_name == meterial.name.good_name:
-                                        # stor.num -= meterial.num*pro_num
-                                        # stor.save()
                     add_stor = StorDetail()
                     add_stor.good_name = pro_name
                     add_stor.num = pro_num
                     add_stor.save()
                 if hpro_num:
-                    # for meterial in meterials:
-                    #     if meterial.hp_name:
-                    #         if meterial.hp_name.hp_name == hpro_name.hp_name:
-                    #             for stor in stors:
-                    #                 if stor.good_name == meterial.name.good_name:
-                    #                     stor.num -= meterial.num*hpro_num
-                    #                     stor.save()
                     add_stor = StorDetail()
                     add_stor.good_name = hpro_name
                     add_stor.num = hpro_num
                     add_stor.save()
+            if new_data['data'].get('is_instor'):
+                send = SendMsg(config['produce'], '产品入库需要确认，请尽快操作')
+                send.send()
         return new_data
 
 
@@ -303,6 +312,9 @@ class UpdateWasteFormPlugin(BaseAdminPlugin):
         wf = WasteForm.objects.get(id=self.wf_id)
         if wf.pf_name.is_finish:
             readonly_fields = ('name', 'num', 'pf_name')
+        if self.user.groups.filter(name=config['manage']):
+            readonly_fields = ()
+            return readonly_fields
         return readonly_fields
 
 

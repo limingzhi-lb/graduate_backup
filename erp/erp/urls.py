@@ -19,7 +19,7 @@ from django.conf.urls import url, include
 
 urlpatterns = [
     url(r'', xadmin.site.urls),
-    # url(r'', include('InfoManage.urls')),
+    url(r'^predict', include('InfoManage.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
 
 ]
