@@ -266,8 +266,6 @@ class UpdateProductPlugin(BaseAdminPlugin):
                 pro_num = pf.pro_num
                 hpro_name = pf.hpro_name
                 hpro_num = pf.hpro_num
-                meterials = Meterial.objects.all()
-                stors = StorDetail.objects.all()
                 if pro_num:
                     add_stor = StorDetail()
                     add_stor.good_name = pro_name
@@ -293,10 +291,11 @@ class WasteFormPlugin(BaseAdminPlugin):
     def formfield_for_dbfield(self, data, *args, **kwargs):
         if isinstance(data, ModelChoiceField):
             queryset = data._get_queryset()
-            if isinstance(queryset[0], ProduceForm):
-                group = ProduceForm.objects.filter(is_finish=False, assembly_line=AssemblyLine.objects.get(leader=self.user))
-                queryset = group.all()
-                data._set_queryset(queryset)
+            if queryset:
+                if isinstance(queryset[0], ProduceForm):
+                    group = ProduceForm.objects.filter(is_finish=False, assembly_line=AssemblyLine.objects.get(leader=self.user))
+                    queryset = group.all()
+                    data._set_queryset(queryset)
         return data
 
 

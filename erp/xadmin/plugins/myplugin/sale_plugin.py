@@ -1,4 +1,4 @@
-from xadmin.views import BaseAdminPlugin, ListAdminView, ModelFormAdminView, CreateAdminView, UpdateAdminView, DetailAdminView
+from xadmin.views import BaseAdminPlugin, CreateAdminView, UpdateAdminView
 import xadmin
 from copy import deepcopy
 from InfoManage.models import *
@@ -70,20 +70,20 @@ class UpdateSaleFormPlugin(BaseAdminPlugin):
         sf = SaleForm.objects.get(id=self.sf_id)
         if sf.check:
             readonly_fields = ('sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
-                     'state', 'check', 'out_stor_date')
+                               'state', 'check', 'out_stor_date')
         elif sf.deliver_date:
             if self.user.is_leader and self.user.groups.all()[0].name == config['sale']:
                 readonly_fields = ('sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
-                                   'state','out_stor_date')
+                                   'state', 'out_stor_date')
         elif sf.state:
             readonly_fields = ('sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
-                     'state', 'check', 'out_stor_date')
+                               'state', 'check', 'out_stor_date')
             if self.user.id == sf.staff_name.id:
                 readonly_fields = ('sf_name', 'staff_name', 'c_name', 'price', 'created',
-             'state', 'check', 'out_stor_date')
+                                   'state', 'check', 'out_stor_date')
                 if self.user.is_leader:
                     readonly_fields = ('sf_name', 'staff_name', 'c_name', 'price', 'created',
-                                   'state', 'out_stor_date')
+                                       'state', 'out_stor_date')
         elif (self.user.is_leader or self.user.id == sf.state.id) and self.user.groups.all()[0].name == config['sale']:
             readonly_fields = ('price', 'created', 'deliver_date',
                                'state', 'check', 'out_stor_date')
@@ -124,10 +124,11 @@ class CreateSaleFormProductPlugin(BaseAdminPlugin):
     def formfield_for_dbfield(self, data, *args, **kwargs):
         if isinstance(data, ModelChoiceField):
             queryset = data._get_queryset()
-            if isinstance(queryset[0], SaleForm):
-                group = SaleForm.objects.filter(check=False, staff_name=self.user.id)
-                queryset = group.all()
-                data._set_queryset(queryset)
+            if queryset:
+                if isinstance(queryset[0], SaleForm):
+                    group = SaleForm.objects.filter(check=False, staff_name=self.user.id)
+                    queryset = group.all()
+                    data._set_queryset(queryset)
         return data
 
     def get_read_only_fields(self, readonly_fields, *args, **kwargs):
@@ -138,12 +139,8 @@ class CreateSaleFormProductPlugin(BaseAdminPlugin):
 
     def get_form_datas(self, data):
         new_data = deepcopy(data)
-        print(new_data)
-        stordetails = StorDetail.objects.all()
         if 'data' in new_data.keys():
             product = Product.objects.get(id=data['data']['pro_name'])
-            print(product)
-
             stordetail = StorDetail.objects.filter(good_name=product.pro_name)
             if not stordetail:
                 new_data['data']['num'] = '0'
@@ -189,14 +186,12 @@ class UpdateSaleFormProductPlugin(BaseAdminPlugin):
 
     def get_form_datas(self, data):
         new_data = deepcopy(data)
-        # print(new_data)
         if 'data' in new_data.keys():
             if 'pro_name' in new_data['data'].keys():
                 product = Product.objects.get(id=new_data['data']['pro_name'])
                 stordetail = StorDetail.objects.filter(good_name=product.pro_name)
                 if int(new_data['data']['num']) > stordetail[0].num:
                     new_data['data']['num'] = str(stordetail[0].num)
-        # print(new_data)
         return new_data
 
 

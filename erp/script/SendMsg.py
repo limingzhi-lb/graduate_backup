@@ -1,5 +1,4 @@
 import itchat
-from users.models import User
 from InfoManage.config import Config
 from django.contrib.auth.models import Group
 config = Config()
@@ -15,5 +14,6 @@ class SendMsg(object):
 
     def send(self):
         users = itchat.search_friends(name=self.user.username)
-        userName = users[0]['UserName']
-        itchat.send(self.msg, toUserName=userName)
+        if users:
+            userName = users[0]['UserName']
+            itchat.send(self.msg, toUserName=userName)

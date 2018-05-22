@@ -1,10 +1,8 @@
 from django.db import models
 from users.models import User
-# from django.models
 
 
 class RawMaterial(models.Model):
-    # rm_id = models.IntegerField(primary_key=True)
     rm_name = models.CharField('名称', max_length=24)
     price = models.FloatField('价格')
     classification = models.CharField('分类', max_length=8)
@@ -23,7 +21,6 @@ class RawMaterial(models.Model):
 
 
 class Vender(models.Model):
-    # ven_id = models.IntegerField(primary_key=True)
     ven_name = models.CharField('名称', max_length=24)
     addr = models.CharField('地址', max_length=24)
     tel = models.CharField('电话', max_length=12)
@@ -43,13 +40,9 @@ class Vender(models.Model):
 class StorDetail(models.Model):
     good_name = models.CharField('货物名称', max_length=12)
     num = models.IntegerField('数量')
-    # s_name = models.CharField('仓库名', max_length=12)
-    # s_name = models.ForeignKey('仓库名', Stor.s_name)
-    # s_name = models.ForeignKey(Stor, related_name='stor_detail_s_name', verbose_name='仓库')
 
     class Meta:
         db_table = 'StorDetail'
-        # unique_together = ('good_name', 's_name')
         verbose_name = '仓库详情'
         verbose_name_plural = '仓库详情'
 
@@ -59,18 +52,13 @@ class StorDetail(models.Model):
 
 class OrderForm(models.Model):
     of_name = models.CharField('订单名称', max_length=32, unique=True)
-    # ven_name = models.ForeignKey('供货商', Vender, related_name='ven_name')
     ven_name = models.ForeignKey(Vender, related_name='order_form_ven_name', verbose_name='供货商')
-    # ven_id = models.IntegerField()
     created = models.DateTimeField('创建时间')
-    # s_name = models.ForeignKey('存入仓库', Stor, related_name='s_name')
-    # s_name = models.ForeignKey(Stor, related_name='order_form_s_name', verbose_name='仓库')
     delivery = models.DateTimeField('交货时间', blank=True, null=True)
     typ = models.BooleanField('采购订单', default=True)
     receipt_status = models.BooleanField('已收货', default=False)
     payment_status = models.BooleanField('已支付', default=False)
     total_price = models.FloatField('总价', blank=True, null=True)
-    # executor = models.ForeignKey('执行人', User, related_name='username')
     executor = models.ForeignKey(User, related_name='order_form_username', verbose_name='执行人')
     storage_time = models.DateTimeField('入库时间', blank=True, null=True)
     is_finish = models.BooleanField('是否完成', default=False)
@@ -85,76 +73,26 @@ class OrderForm(models.Model):
 
 
 class OrderFormGoods(models.Model):
-    # rm_name = models.ForeignKey('材料', RawMaterial, related_name='rm_name')
     rm_name = models.ForeignKey(RawMaterial, related_name='order_form_goods_rm_name', verbose_name='材料')
-    # of_id = models.IntegerField(primary_key=True)
     num = models.IntegerField('数量', null=True)
-    # of_name = models.ForeignKey('订单名', OrderForm, related_name='of_name')
     of_name = models.ForeignKey(OrderForm, related_name='order_form_goods_of_name', verbose_name='订单')
-    # batch_number = models.CharField('批次号', max_length=8, blank=True)
 
     class Meta:
         db_table = 'OrderFormGoods'
-        # unique_together = ('rm_name', 'of_name')
         verbose_name = '订单中商品'
         verbose_name_plural = '订单中商品'
 
     def __str__(self):
         return self.rm_name.rm_name
 
-'''
-class SwapForm(models.Model):
-    __name__ = 'SwapForm'
-    sf_name = models.CharField('表名', max_length=48, unique=True)
-    # staff_name = models.ForeignKey('执行人', User, related_name='username')
-    staff_name = models.ForeignKey(User, related_name='swap_form_username', verbose_name='执行人')
-    # before_s_id = models.ForeignKey('原仓库', Stor, related_name='s_name')
-    before_s_id = models.ForeignKey(Stor, related_name='swap_form_old_s_name', verbose_name='原仓库')
-    # after_s_id = models.ForeignKey('目标仓库', Stor, related_name='s_name')
-    after_s_id = models.ForeignKey(Stor, related_name='swap_form_s_name', verbose_name='目标仓库')
-    created = models.DateTimeField('创建时间')
-    finished = models.DateTimeField('完成时间', blank=True, null=True)
-    check = models.BooleanField('是否确认', default=False)
-
-    class Meta:
-        db_table = 'SwapForm'
-        verbose_name = '货物调转表'
-        verbose_name_plural = '货物调转表'
-
-    def __str__(self):
-        return self.sf_name
-
-
-class SwapFormDetail(models.Model):
-    # sf_detail_id = models.IntegerField(primary_key=True)
-    # good_name = models.ForeignKey('货物名', StorDetail, related_name='good_name')
-    good_name = models.ForeignKey(StorDetail, related_name='swap_form_detail_good_name', verbose_name='货物名')
-    num = models.IntegerField('数量')
-    # batch_number = models.CharField(max_length=8)
-    # sf_name = models.ForeignKey('调转表', SwapForm, related_name='sf_name')
-    sf_name = models.ForeignKey(SwapForm, related_name='swap_form_detail_sf_name', verbose_name='调转表')
-
-    class Meta:
-        # unique_together = ('good_name', 'sf_name')
-        db_table = 'SwapFormDetail'
-        verbose_name = '调转货物'
-        verbose_name_plural = '调转货物'
-
-    def __str__(self):
-        return self.good_name.good_name
-'''
 
 class OutStorForm(models.Model):
     osf_name = models.CharField('表名', max_length=32, unique=True)
     created = models.DateTimeField('创建时间')
-    # after_s_name = models.ForeignKey('前仓库', Stor, related_name='s_name')
-    # after_s_name = models.ForeignKey(Stor, related_name='out_store_form_s_name', verbose_name='原仓库')
-    # staff_id = models.ForeignKey('新仓库', User, related_name='username')
     staff_id = models.ForeignKey(User, related_name='out_store_form_username', verbose_name='执行人')
     check = models.BooleanField('是否确认', default=False, blank=True)
     note = models.CharField('备注', max_length=64, blank=True, null=True)
     finished = models.DateTimeField('完成时间', blank=True, null=True)
-    # osd_id = ArrayField(models.IntegerField())
 
     class Meta:
         db_table = 'OutStorForm'
@@ -166,16 +104,11 @@ class OutStorForm(models.Model):
 
 
 class OutStorDetail(models.Model):
-    # osd_id = models.IntegerField(primary_key=True)
-    # good_name = models.ForeignKey('货物名', StorDetail, related_name='good_name')
     good_name = models.ForeignKey(StorDetail, related_name='out_store_detail_good_name', verbose_name='货物名')
     num = models.IntegerField('数量')
-    # batch_number = models.CharField(max_length=8)
-    # osf_name = models.ForeignKey('出库表', OutStorForm, related_name='osf_name')
     osf_name = models.ForeignKey(OutStorForm, related_name='out_store_detail_osf_name', verbose_name='出库表')
 
     class Meta:
-        # unique_together = ('good_name', 'osf_name')
         db_table = 'OutStorDetail'
         verbose_name = '出库货物'
         verbose_name_plural = '出库货物'
@@ -214,18 +147,14 @@ class HalfProduct(models.Model):
 
 
 class Meterial(models.Model):
-    # name = models.ForeignKey('材料名', StorDetail, related_name='good_name')
     name = models.ForeignKey(StorDetail, related_name='meterial_good_name', verbose_name='材料')
     num = models.IntegerField('数量')
-    # product = models.ForeignKey('成品', Product, related_name='pro_name', null=True)
     product = models.ForeignKey(Product, related_name='meterial_pro_name', null=True, verbose_name='成品',blank=True)
-    # half_product = models.ForeignKey('半成品', HalfProduct, related_name='hp_name', null=True)
     hp_name = models.ForeignKey(HalfProduct, related_name='meterial_hp_name', null=True, verbose_name='半成品', blank=True)
     created = models.DateTimeField('创建时间')
     updated = models.DateTimeField('更新时间')
 
     class Meta:
-        # unique_together = ('name', 'num')
         db_table = 'Meterial'
         verbose_name = '零部件'
         verbose_name_plural = '零部件'
@@ -251,20 +180,15 @@ class AssemblyLine(models.Model):
 
 class ProduceForm(models.Model):
     pf_name = models.CharField('表名', max_length=32, unique=True)
-    # pro_name = models.ForeignKey('成品', Product, related_name='pro_name')
     pro_name = models.ForeignKey(Product, related_name='produce_form_pro_name', verbose_name='成品', blank=True, null=True)
     pro_num = models.IntegerField('成品数量', blank=True, null=True)
-    # hpro_name = models.ForeignKey('半成品', HalfProduct, related_name='hp_name')
     hpro_name = models.ForeignKey(HalfProduct, related_name='produce_form_hp_name', verbose_name='半成品', blank=True, null=True)
     hpro_num = models.IntegerField('半成品数量', blank=True, null=True)
     created = models.DateTimeField('创建时间')
-    # assembly_line = models.ForeignKey('生产线', AssemblyLine, related_name='ass_name')
     assembly_line = models.ForeignKey(AssemblyLine, related_name='produce_form_ass_name', verbose_name='生产线')
     actual_num = models.IntegerField('实际数量', blank=True, null=True)
     is_instor = models.BooleanField('是否入库', default=False, blank=True)
     is_finish = models.BooleanField('是否完成', default=False, blank=True)
-    # s_name = models.ForeignKey('仓库名', Stor, related_name='s_name')
-    # s_name = models.ForeignKey(Stor, related_name='produce_form_s_name', verbose_name='仓库')
     qualified_rate = models.FloatField('合格率', blank=True, null=True)
     note = models.TextField('备注', blank=True)
 
@@ -284,7 +208,6 @@ class WasteForm(models.Model):
 
     class Meta:
         db_table = 'WasteForm'
-        # unique_together = ('name', 'pf_name')
         verbose_name = '废料表'
         verbose_name_plural = '废料表'
 
@@ -308,17 +231,12 @@ class Customer(models.Model):
 
 class SaleForm(models.Model):
     sf_name = models.CharField('表名', max_length=32, unique=True)
-    # staff_name = models.ForeignKey('执行人', User, related_name='username')
     staff_name = models.ForeignKey(User, related_name='sale_form_username', verbose_name='执行人')
-    # c_name = models.ForeignKey('客户', Customer, related_name='c_name')
     c_name = models.ForeignKey(Customer, related_name='sale_form_c_name', verbose_name='客户')
     price = models.FloatField('价格', null=True, blank=True)
     created = models.DateTimeField('创建时间')
     deliver_date = models.DateField('交货时间', null=True, blank=True)
-    # s_name = models.ForeignKey('仓库名', Stor, related_name='s_name')
-    # s_name = models.ForeignKey(Stor, related_name='sale_form_s_name', verbose_name='仓库')
     state = models.BooleanField('是否发货', default=False, blank=True)
-    # pro_name = ArrayField(models.IntegerField())
     check = models.BooleanField('是否确认', default=False, blank=True)
     out_stor_date = models.DateTimeField('出库时间', null=True, blank=True)
 
@@ -332,15 +250,12 @@ class SaleForm(models.Model):
 
 
 class SaleFormProduct(models.Model):
-    # sf_name = models.ForeignKey('所属销售订单', SaleForm, related_name='sf_name')
     sf_name = models.ForeignKey(SaleForm, related_name='sale_form_product_sf_name', verbose_name='销售订单')
-    # pro_name = models.ForeignKey('产品名', Product, related_name='pro_name')
     pro_name = models.ForeignKey(Product, related_name='sale_form_product_pro_name', verbose_name='产品')
     num = models.IntegerField('数量')
 
     class Meta:
         db_table = 'SaleFormProduct'
-        # unique_together = ('sf_name', 'pro_name')
         verbose_name = '订单产品'
         verbose_name_plural = '订单产品'
 

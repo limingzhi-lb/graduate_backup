@@ -61,9 +61,10 @@ class OrderFormGoodsPlugin(BaseAdminPlugin):
     def formfield_for_dbfield(self, data, *args, **kwargs):
         if isinstance(data, ModelChoiceField):
             queryset = data._get_queryset()
-            if isinstance(queryset[0], OrderForm):
-                queryset = OrderForm.objects.filter(is_finish=False)
-                data._set_queryset(queryset)
+            if queryset:
+                if isinstance(queryset[0], OrderForm):
+                    queryset = OrderForm.objects.filter(is_finish=False)
+                    data._set_queryset(queryset)
         return data
 
     def get_form_datas(self, data):
@@ -91,10 +92,11 @@ class OrderFormPlugin(BaseAdminPlugin):
     def formfield_for_dbfield(self, data, *args, **kwargs):
         if isinstance(data, ModelChoiceField):
             queryset = data._get_queryset()
-            if isinstance(queryset[0], User):
-                group = Group.objects.get(name=config['purchase'])
-                queryset = group.user_set.all()
-                data._set_queryset(queryset)
+            if queryset:
+                if isinstance(queryset[0], User):
+                    group = Group.objects.get(name=config['purchase'])
+                    queryset = group.user_set.all()
+                    data._set_queryset(queryset)
         return data
 
 
@@ -251,5 +253,3 @@ xadmin.site.register_plugin(UpdateOrderFormByPurchase, UpdateAdminView)
 xadmin.site.register_plugin(UpdateOrderFormGoodsPlugin, UpdateAdminView)
 xadmin.site.register_plugin(OrderFormGoodsPlugin, ModelFormAdminView)
 xadmin.site.register_plugin(OrderFormPlugin, ModelFormAdminView)
-
-

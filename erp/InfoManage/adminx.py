@@ -1,11 +1,6 @@
 import xadmin
 from xadmin import views
 from .models import *
-from django.contrib import admin
-from .config import Config
-'''
-    添加配置文件，自己定义读取user_group的脚本，获取信息
-'''
 
 
 class BaseSetting(object):
@@ -27,11 +22,9 @@ class VenderAdmin(object):
 class RawMaterialAdmin(object):
     say_hello = False
     used = False
-    # edit = True
     list_display = ['rm_name', 'price', 'classification', 'minimum_inventory', 'created', 'updated']
     search_fields = ['rm_name', 'price', 'classification', 'minimum_inventory', 'created', 'updated']
     list_filter = ['rm_name', 'price', 'classification', 'minimum_inventory', 'created', 'updated']
-    # readonly_fields = ('price',)
     list_per_page = 5
 
 
@@ -45,7 +38,6 @@ class StorAdmin(object):
     search_fields = ['s_name', 'valid']
     list_filter = ['s_name', 'valid']
     list_per_page = 5
-    # inlines = [StorDetailInline, ]
 
 
 class StorDetailAdmin(object):
@@ -67,26 +59,6 @@ class OrderFormAdmin(object):
     list_filter = ['of_name', 'ven_name', 'created', 'delivery', 'typ', 'receipt_status', 'payment_status',
                    'total_price', 'executor', 'storage_time', 'is_finish']
     list_per_page = 5
-    # inlines = [OrderFormGoodsInline, ]
-
-    # def rm_name(self, obj):
-    #     return
-    # def get_readonly_fields(self):
-    #     # user_id = self.user.id
-    #     group = Config()
-    #     print(self.user.groups.all()[0].name)
-    #     if self.user.groups.all()[0].name == group['stor']:
-    #         self.readonly_fields = ('of_name', 'ven_name', 'created', 's_name', 'typ', 'payment_status',
-    #                                 'total_price', 'executor', 'is_finish')
-    #         return self.readonly_fields
-    #     elif self.user.groups.all()[0].name == group['purchase']:
-    #         if not self.user.is_leader:
-    #             self.readonly_fields = ('delivery', 'receipt_status', 'payment_status', 'executor',
-    #                                     'storage_time', 'is_finish')
-    #         else:
-    #             self.readonly_fields = ('delivery', 'receipt_status', 'storage_time')
-    #         return self.readonly_fields
-    #     return self.readonly_fields
 
 
 class OrderFormGoodsAdmin(object):
@@ -96,21 +68,6 @@ class OrderFormGoodsAdmin(object):
     list_filter = ['rm_name', 'num', 'of_name']
     list_per_page = 5
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     return super(OrderFormGoodsAdmin, self).get_form(request, obj, **kwargs)
-    #
-    # def get_fieldsets(self, request, obj=None):
-    #     """
-    #     Hook for specifying fieldsets.
-    #     """
-    #     if self.fieldsets:
-    #         return self.fieldsets
-    #     return [(None, {'fields': self.get_fields(request, obj)})]
-
-
-# class SwapFormDetailInline(object):
-#     model = SwapFormDetail
-#     extra = 0
 
 class SwapFormAdmin(object):
     swap_form = True
@@ -137,12 +94,6 @@ class OutStorDetailAdmin(object):
     list_per_page = 5
 
 
-
-# class OutStorDetailInline(object):
-#     model = OutStorDetail
-#     extra = 1
-
-
 class OutStoreFormAdmin(object):
     create_out_stor = True
     update_out_stor = True
@@ -150,7 +101,6 @@ class OutStoreFormAdmin(object):
     search_fields = ['osf_name', 'created', 'staff_id', 'check', 'note', 'finished']
     list_filter = ['osf_name', 'created', 'staff_id', 'check', 'note', 'finished']
     list_per_page = 5
-    # inlines = [OutStorDetailInline, ]
 
 
 class AssemblyLineAdmin(object):
@@ -228,11 +178,9 @@ class SaleFormAdmin(object):
     list_filter = ['sf_name', 'staff_name', 'c_name', 'price', 'created', 'deliver_date',
                    'state', 'check', 'out_stor_date']
     list_per_page = 5
-    # inlines = [SaleFormProductInline, ]
     data_charts = {
         "user_count": {'title': u"销售业绩", "x-field": "deliver_date", "y-field": ("price",),
                        "order": ('price',)},
-        # "avg_count": {'title': u"Avg Report", "x-field": "date", "y-field": ('avg_count',), "order": ('date',)}
     }
 
 
@@ -253,7 +201,15 @@ class GlobalSetting(object):
     site_footer = '我的公司'
     menu_style = "accordion"
     global_models_icon = {
-        Vender: "glyphicon glyphicon-user", RawMaterial: "fa fa-cloud"
+        Vender: "glyphicon glyphicon-user", RawMaterial: "glyphicon glyphicon-align-justify",
+        Customer: "glyphicon glyphicon-user", AssemblyLine: 'glyphicon glyphicon-align-justify',
+        Product: 'glyphicon glyphicon-align-justify', HalfProduct: 'glyphicon glyphicon-align-justify',
+        Meterial: 'glyphicon glyphicon-align-justify', PredictData: 'glyphicon glyphicon-cloud',
+        OrderForm: 'glyphicon glyphicon-book', SaleForm: 'glyphicon glyphicon-book',
+        OrderFormGoods: 'glyphicon glyphicon-book', SaleFormProduct: 'glyphicon glyphicon-book',
+        StorDetail: 'glyphicon glyphicon-book', OutStorDetail: 'glyphicon glyphicon-book',
+        OutStorForm: 'glyphicon glyphicon-book', ProduceForm: 'glyphicon glyphicon-book',
+        WasteForm: 'glyphicon glyphicon-book',
     }
 
 

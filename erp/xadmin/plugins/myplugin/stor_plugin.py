@@ -1,4 +1,4 @@
-from xadmin.views import BaseAdminPlugin, ListAdminView, ModelFormAdminView, CreateAdminView, UpdateAdminView, DetailAdminView
+from xadmin.views import BaseAdminPlugin, ModelFormAdminView, CreateAdminView, UpdateAdminView
 import xadmin
 from copy import deepcopy
 from InfoManage.models import *
@@ -104,7 +104,6 @@ class UpdateOutStorForm(BaseAdminPlugin):
                 for os_info in os_infos:
                     os_info.good_name.num -= os_info.num
                     os_info.good_name.save()
-        # print(os_info[0].good_name.num)
         return new_data
 
 
@@ -123,18 +122,15 @@ class OutStorDetailForm(BaseAdminPlugin):
             stor_info = StorDetail.objects.get(id=good_name)
             if int(stor_info.num) < int(new_data['data']['num']):
                 new_data['data']['num'] = stor_info.num
-            # stor_info.num -= new_data['data']['num']
-            # stor_info.save()
         return new_data
 
     def formfield_for_dbfield(self, data, *args, **kwargs):
         if isinstance(data, ModelChoiceField):
             queryset = data._get_queryset()
-            if isinstance(queryset[0], OutStorForm):
-                queryset = OutStorForm.objects.filter(check=False)
-                # queryset = group.user_set.all()
-                print(queryset)
-                data._set_queryset(queryset)
+            if queryset:
+                if isinstance(queryset[0], OutStorForm):
+                    queryset = OutStorForm.objects.filter(check=False)
+                    data._set_queryset(queryset)
         return data
 
 
@@ -164,11 +160,7 @@ class UpdateOutStorDetailForm(BaseAdminPlugin):
         return readonly_fields
 
 
-
 xadmin.site.register_plugin(CreateOutStorForm, CreateAdminView)
 xadmin.site.register_plugin(UpdateOutStorForm, UpdateAdminView)
-# xadmin.site.register_plugin(SwapFormDetail, CreateAdminView)
-# xadmin.site.register_plugin(SwapFormDetail, UpdateAdminView)
 xadmin.site.register_plugin(OutStorDetailForm, ModelFormAdminView)
 xadmin.site.register_plugin(UpdateOutStorDetailForm, UpdateAdminView)
-
